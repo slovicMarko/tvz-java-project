@@ -4,6 +4,7 @@ import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.model.Comment;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.User;
+import hr.production.slovic_projektni.model.UserRole;
 import hr.production.slovic_projektni.sort.CommentSorter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -91,7 +92,7 @@ public class ProjectViewController implements Initializable{
     }
 
     public void addCommentButton(){
-        commentList.add(new Comment(new User(Long.parseLong("1"), "Pajo", "Patak"),
+        commentList.add(new Comment(new User(Long.parseLong("1"), "Pajo", "Patak", UserRole.ADMIN, "pajo"),
                 commentTextArea.getText(), 0));
         showComments();
 

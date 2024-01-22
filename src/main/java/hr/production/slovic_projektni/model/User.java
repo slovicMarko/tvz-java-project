@@ -29,12 +29,13 @@ public class User extends NamedEntity {
         this.userRole = userRole;
     }
 
-    public User(Long id, String firstName, String lastName) {
+    public User(Long id, String firstName, String lastName, UserRole userRole, String username) {
         super(id);
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userRole = userRole;
+        this.username = username;
     }
-
 
     public static String hashPassword(String password){
         try {

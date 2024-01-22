@@ -6,8 +6,7 @@ import java.util.List;
 public class Project extends NamedEntity {
     private String description;
     private LocalDate startDate;
-    private User author;  // POGLEDATI KOJI KORISTITI
-    private Long authorId;
+    private User author;
     private Subject subject;
     private List<Comment> comments;
 
@@ -16,15 +15,6 @@ public class Project extends NamedEntity {
         this.description = description;
         this.startDate = startDate;
         this.author = author;
-        this.subject = subject;
-        this.comments = comments;
-    }
-
-    public Project(Long id, String name, String description, LocalDate startDate, Long authorId, Subject subject, List<Comment> comments) {
-        super(id, name);
-        this.description = description;
-        this.startDate = startDate;
-        this.authorId = authorId;
         this.subject = subject;
         this.comments = comments;
     }
@@ -51,14 +41,6 @@ public class Project extends NamedEntity {
 
     public void setAuthor(User author) {
         this.author = author;
-    }
-
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
     }
 
     public Subject getSubject() {

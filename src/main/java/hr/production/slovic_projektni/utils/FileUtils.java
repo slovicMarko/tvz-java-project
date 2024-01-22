@@ -14,17 +14,15 @@ public class FileUtils {
 
     public static List<Project> getProjects(){
 
-        User user1 = new User(Long.parseLong("1"), "Marko", "Slovic");
-        User user2 = new User(Long.parseLong("1"), "Pero", "Perić");
-        User user3 = new User(Long.parseLong("1"), "Ivan", "Ivić");
-        User user4 = new User(Long.parseLong("1"), "Marko", "Markić");
+        List<User> users = DatabaseUtilUsers.getUsersList();
+
 
         List<Project> projects = new ArrayList<>();
         projects.add(new Project(Long.parseLong("1"),
                 "Fibbonaccijev niz",
                 "Niz gdje je svaki iduci broj pomnozen prethodnim",
                 LocalDate.now(),
-                user1,
+                users.get(0),
                 Subject.DUBOKO_UCENJE,
                 commentsData()
                 ));
@@ -32,7 +30,7 @@ public class FileUtils {
                 "Euklidov algoritam",
                 "algoritam",
                 LocalDate.now(),
-                user2,
+                users.get(1),
                 Subject.PROGRAMIRANJE,
                 commentsData()
         ));
@@ -40,7 +38,7 @@ public class FileUtils {
                 "projekt1",
                 "opis1",
                 LocalDate.now(),
-                user3,
+                users.get(2),
                 Subject.PROGRAMIRANJE_U_JEZIKU_JAVA,
                 commentsData()
         ));
@@ -48,7 +46,7 @@ public class FileUtils {
                 "projekt2",
                 "opis2",
                 LocalDate.now(),
-                user4,
+                users.get(3),
                 Subject.OBJEKTNO_ORIJENTIRANO_PROGRAMIRANJE,
                 commentsData()
         ));
@@ -57,14 +55,12 @@ public class FileUtils {
     }
 
     private static List<Comment> commentsData() {
-        User user1 = new User(Long.parseLong("1"), "John", "Doe");
-        User user2 = new User(Long.parseLong("1"), "Josip", "Josipović");
-        User user3 = new User(Long.parseLong("1"), "Spužva", "Bob");
-        User user4 = new User(Long.parseLong("1"), "Zekoslav", "Mrkva");
+        List<User> users = DatabaseUtilUsers.getUsersList();
+
 
         List<Comment> commentsList = new ArrayList<>();
 
-        commentsList.add(new Comment(user1,"""
+        commentsList.add(new Comment(users.get(0),"""
                 Moje rjesenje za Fibbonacijev niz
                 public void initialize(Project project){
                                 
@@ -74,12 +70,12 @@ public class FileUtils {
                     }           
                 """,10));
 
-        commentsList.add(new Comment(user2,"""
+        commentsList.add(new Comment(users.get(1),"""
                 Mene je to također mučilo pa pogledaj ovaj video:        
                 https://www.youtube.com/watch?v=NHPLjIkrNvI&ab_channel=MahmoudHamwi
                 """,2));
 
-        commentsList.add(new Comment(user3,"""
+        commentsList.add(new Comment(users.get(2),"""
                 Moja NewScreenController klasa
                 
                 public class NewScreenController {
@@ -129,7 +125,7 @@ public class FileUtils {
                 }
                 """,15));
 
-        commentsList.add(new Comment(user4,"""
+        commentsList.add(new Comment(users.get(3),"""
                 Samo radi sve ce se to vratit s kamatama,
                 svidja mi se rjesenje od Josipa.
                 """,7));

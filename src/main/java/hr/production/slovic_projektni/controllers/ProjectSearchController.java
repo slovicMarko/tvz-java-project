@@ -5,6 +5,7 @@ import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.model.ProjectView;
 import hr.production.slovic_projektni.model.Subject;
 import hr.production.slovic_projektni.model.Project;
+import hr.production.slovic_projektni.utils.DatabaseUtilProject;
 import hr.production.slovic_projektni.utils.FileUtils;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
@@ -40,7 +41,9 @@ public class ProjectSearchController {
 
         setChoiceBoxes();
 
-        List<Project> projects = FileUtils.getProjects();
+        //List<Project> projects1 = FileUtils.getProjects();
+
+        List<Project> projects = DatabaseUtilProject.getProjects();
         ObservableList<Project> observableProjectsList = FXCollections.observableArrayList(projects);
 
         projectTableView.setItems(observableProjectsList);
@@ -57,7 +60,11 @@ public class ProjectSearchController {
     }
 
     public void applyButton(){
-        List<Project> projects = FileUtils.getProjects();
+
+        //List<Project> projects = FileUtils.getProjects();
+
+        List<Project> projects = DatabaseUtilProject.getProjects();
+
         List<Subject> subjects = Arrays.stream(Subject.values()).toList();
 
         List<Subject> filteredSubjects = subjects.stream()
