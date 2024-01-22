@@ -1,6 +1,7 @@
 package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.model.Subject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -16,7 +17,8 @@ public class NewScreenController {
     @FXML private RowConstraints gridPaneRowWithForm;
     @FXML private RowConstraints gridPaneRowWithButtons;
 
-    public void initialize() {    }
+    public void initialize() {
+    }
 
 
     public void showLoginView(){

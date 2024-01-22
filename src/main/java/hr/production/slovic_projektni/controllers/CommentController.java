@@ -8,15 +8,22 @@ public class CommentController {
 
     @FXML private Label commentAuthor;
     @FXML private Label commentSolution;
-    @FXML private Label numberOfLikesLabel;
+    @FXML private Label numberOfLikes;
+
+    Comment baseComment;
+
+    public void initialize(Comment comment){
+        baseComment = comment;
+        setData(comment);
+    }
 
     public void setData(Comment comment){
         commentAuthor.setText(comment.author().getFirstName() + " " + comment.author().getLastName());
         commentSolution.setText(comment.content());
-        numberOfLikesLabel.setText(comment.getLikes().toString());
+        numberOfLikes.setText(comment.getLikes().toString());
     }
 
-    public void initialize(Comment comment){
-        setData(comment);
+    public void likeButtonClicked(){
+        setData(baseComment.submitLike());
     }
 }

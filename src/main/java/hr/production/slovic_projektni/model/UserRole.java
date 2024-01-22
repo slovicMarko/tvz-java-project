@@ -1,9 +1,9 @@
 package hr.production.slovic_projektni.model;
 
 public enum UserRole {
-    ADMIN("ADMIN"),
-    PROFESSOR("PROFESSOR"),
-    STUDENT("STUDENT");
+    ADMIN("Admin"),
+    PROFESSOR("Professor"),
+    STUDENT("Student");
 
     private final String name;
 

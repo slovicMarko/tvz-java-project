@@ -32,7 +32,7 @@
             </Label>
             <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="95.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                <children>
-                  <Label fx:id="numberOfLikesLabel" text="0">
+                  <Label fx:id="numberOfLikes" text="0">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -40,7 +40,7 @@
                         <Insets right="16.0" />
                      </HBox.margin>
                   </Label>
-                  <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefWidth="50.0" text="Like" />
+                  <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#likeButtonClicked" prefWidth="50.0" text="Like" />
                </children>
             </HBox>
          </children>

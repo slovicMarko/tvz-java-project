@@ -8,26 +8,9 @@ import javafx.scene.Scene;
 
 import java.io.IOException;
 
-public class ProjectView {
+public interface ProjectView {
 
-    private static ProjectViewController projectViewController;
-
-
-    public ProjectView(Project project) {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("projectView.fxml"));
-
-        try {
-            fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
-        this.projectViewController = fxmlLoader.getController();
-        projectViewController.initialize(project);
-    }
-
-    public static void showProjectView(Project project){
+    static void showProjectView(Project project){
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("projectView.fxml"));
 
         try {
@@ -38,7 +21,7 @@ public class ProjectView {
             MainApplication.getMainStage().setScene(scene);
             MainApplication.getMainStage().show();
 
-            projectViewController = fxmlLoader.getController();
+            ProjectViewController projectViewController = fxmlLoader.getController();
             projectViewController.initialize(project);
 
 

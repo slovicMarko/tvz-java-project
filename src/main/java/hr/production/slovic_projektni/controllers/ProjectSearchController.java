@@ -57,7 +57,7 @@ public class ProjectSearchController {
     }
 
     public void applyButton(){
-        System.out.println(professorFilterChoiceBox.getValue());
+        List<Project> projects = FileUtils.getProjects();
         List<Subject> subjects = Arrays.stream(Subject.values()).toList();
 
         List<Subject> filteredSubjects = subjects.stream()
@@ -67,6 +67,12 @@ public class ProjectSearchController {
         for (Subject subject : filteredSubjects){
             System.out.println(subject.getName());
         }
+
+        List<Project> filteredProjects =  projects.stream()
+                .filter(project -> filteredSubjects.contains(project.getSubject()))
+                .collect(Collectors.toList());
+
+        projectTableView.setItems(FXCollections.observableArrayList(filteredProjects));
 
     }
 

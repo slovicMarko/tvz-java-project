@@ -53,7 +53,6 @@ public class FileUtils {
                 commentsData()
         ));
 
-
         return projects;
     }
 
