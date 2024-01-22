@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="25.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.production.slovic_projektni.controllers.MenuController">
+    <MenuBar prefHeight="25.0" prefWidth="600.0">
+        <menus>
+         <Menu mnemonicParsing="false" text="User">
+           <items>
+             <MenuItem mnemonicParsing="false" text="Manage users" />
+               <MenuItem mnemonicParsing="false" text="Log out" />
+               <MenuItem mnemonicParsing="false" text="Exit" />
+           </items>
+         </Menu>
+            <Menu mnemonicParsing="false" text="Problem">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#showProjectSearchPage" text="Search" />
+               <MenuItem mnemonicParsing="false" onAction="#showProjectSearchPage" text="New Problem" />
+                </items>
+            </Menu>
+        </menus>
+    </MenuBar>
+</AnchorPane>
