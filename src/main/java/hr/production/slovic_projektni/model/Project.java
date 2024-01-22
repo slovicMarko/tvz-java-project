@@ -1,113 +1,79 @@
 package hr.production.slovic_projektni.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
-public class Project {
-    private Long Id;
-    private Long ownerId;
-    private String projectName;
-    private String projectDescription;
-    private String projectSubject = "PUJ";
-    private String projectProfessor = "A. Radovan";
-    private Person projectOwner;
-    private LocalDate dateOfPosting;
-    private Integer numberOfLikes = 0;
-    private Integer numberOfDislikes = 0;
+public class Project extends NamedEntity {
+    private String description;
+    private LocalDate startDate;
+    private User author;  // POGLEDATI KOJI KORISTITI
+    private Long authorId;
+    private Subject subject;
+    private List<Comment> comments;
 
-    public Project(Long id, Long ownerId, String projectName, String projectDescription, Person projectOwner, LocalDate dateOfPosting) {
-        Id = id;
-        this.ownerId = ownerId;
-        this.projectName = projectName;
-        this.projectDescription = projectDescription;
-        this.projectOwner = projectOwner;
-        this.dateOfPosting = dateOfPosting;
+    public Project(Long id, String name, String description, LocalDate startDate, User author, Subject subject, List<Comment> comments) {
+        super(id, name);
+        this.description = description;
+        this.startDate = startDate;
+        this.author = author;
+        this.subject = subject;
+        this.comments = comments;
     }
 
-    public Long getId() {
-        return Id;
+    public Project(Long id, String name, String description, LocalDate startDate, Long authorId, Subject subject, List<Comment> comments) {
+        super(id, name);
+        this.description = description;
+        this.startDate = startDate;
+        this.authorId = authorId;
+        this.subject = subject;
+        this.comments = comments;
     }
 
-    public void setId(Long id) {
-        Id = id;
+    public String getDescription() {
+        return description;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public String getProjectDescription() {
-        return projectDescription;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public void setProjectDescription(String projectDescription) {
-        this.projectDescription = projectDescription;
+    public User getAuthor() {
+        return author;
     }
 
-    public Person getProjectOwner() {
-        return projectOwner;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
-    public void setProjectOwner(Person projectOwner) {
-        this.projectOwner = projectOwner;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public LocalDate getDateOfPosting() {
-        return dateOfPosting;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
-    public void setDateOfPosting(LocalDate dateOfPosting) {
-        this.dateOfPosting = dateOfPosting;
+    public Subject getSubject() {
+        return subject;
     }
 
-    public Long getOwnerId() {
-
-        return ownerId;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public Integer getNumberOfLikes() {
-        return numberOfLikes;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
-
-    public void setNumberOfLikes(Integer numberOfLikes) {
-        this.numberOfLikes = numberOfLikes;
-    }
-
-    public Integer getNumberOfDislikes() {
-        return numberOfDislikes;
-    }
-
-    public void setNumberOfDislikes(Integer numberOfDislikes) {
-        this.numberOfDislikes = numberOfDislikes;
-    }
-
-    public String getProjectSubject() {
-        return projectSubject;
-    }
-
-    public void setProjectSubject(String projectSubject) {
-        this.projectSubject = projectSubject;
-    }
-
-    public String getProjectProfessor() {
-        return projectProfessor;
-    }
-
-    public void setProjectProfessor(String projectProfessor) {
-        this.projectProfessor = projectProfessor;
-    }
-
-    public Boolean isHighPriority(){
-        return true;
-    }
-
-
 }

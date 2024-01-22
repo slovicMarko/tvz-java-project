@@ -1,33 +1,25 @@
 package hr.production.slovic_projektni.model;
 
-public class Comment {
 
-    private String title;
-    private String author;
-    private String solution;
+public record Comment(User author, String content, Integer likes) implements LikedComment {
 
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
+    @Override
+    public User author() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    @Override
+    public String content() {
+        return content;
     }
 
-    public String getSolution() {
-        return solution;
+    @Override
+    public Integer getLikes() {
+        return likes;
     }
 
-    public void setSolution(String solution) {
-        this.solution = solution;
+    @Override
+    public Comment submitLike() {
+        return new Comment(author, content, likes+1);
     }
 }

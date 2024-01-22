@@ -45,10 +45,10 @@
             <children>
                <Label text="Subject filter">
                   <VBox.margin>
-                     <Insets top="14.0" />
+                     <Insets left="54.0" top="14.0" />
                   </VBox.margin>
                </Label>
-               <ChoiceBox maxWidth="200.0" prefWidth="200.0">
+               <ChoiceBox fx:id="subjectFilterChoiceBox" maxWidth="200.0" prefWidth="200.0">
                   <VBox.margin>
                      <Insets left="54.0" />
                   </VBox.margin></ChoiceBox>
@@ -63,10 +63,10 @@
                            <Insets top="14.0" />
                         </VBox.margin>
                      </Label>
-                     <ChoiceBox maxWidth="200.0" prefWidth="200.0" />
+                     <ChoiceBox fx:id="professorFilterChoiceBox" maxWidth="200.0" prefWidth="200.0" />
                   </children>
                </VBox>
-               <Button mnemonicParsing="false" text="Apply filter">
+               <Button mnemonicParsing="false" onAction="#applyButton" text="Apply filter">
                   <HBox.margin>
                      <Insets top="30.0" />
                   </HBox.margin>

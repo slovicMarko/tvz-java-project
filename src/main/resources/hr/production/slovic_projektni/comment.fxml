@@ -32,7 +32,7 @@
             </Label>
             <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="95.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                <children>
-                  <Label text="0">
+                  <Label fx:id="numberOfLikesLabel" text="0">
                      <font>
                         <Font size="14.0" />
                      </font>
