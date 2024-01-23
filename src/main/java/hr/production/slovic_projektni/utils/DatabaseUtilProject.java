@@ -5,16 +5,35 @@ import hr.production.slovic_projektni.model.Subject;
 import hr.production.slovic_projektni.model.User;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class DatabaseUtilProject {
+
+    public static void saveProject(String projectName, String projectDescription, Subject subject){
+        try(Connection connection = DatabaseConnection.connectToDatabase()){
+
+            String insertProjectSql = "INSERT INTO PROJECT (NAME, DESCRIPTION, AUTHOR_ID, SUBJECT, START_DATE)\n" +
+                    "VALUES (?, ?, ?, ?, ?);\n";
+
+            PreparedStatement pstmt = connection.prepareStatement(insertProjectSql);
+            pstmt.setString(1, projectName);
+            pstmt.setString(2, projectDescription);
+            pstmt.setLong(3, 6);
+            pstmt.setString(4, subject.toString());
+            pstmt.setDate(5, Date.valueOf(LocalDate.now()));
+            pstmt.execute();
+
+        } catch (SQLException | IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+
 
 
     public static List<Project> getProjects() {

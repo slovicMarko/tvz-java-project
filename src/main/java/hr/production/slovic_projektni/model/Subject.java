@@ -1,5 +1,9 @@
 package hr.production.slovic_projektni.model;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public enum Subject {
 
     ADMINISTRIRANJE_RACUNALNIH_MREZA("Administrianje računalnih mreža", "Dunja Bjelobrk Knežević"),
@@ -54,6 +58,24 @@ public enum Subject {
     Subject(String name, String professorName) {
         this.name = name;
         this.professorName = professorName;
+    }
+
+    public static List<String> getAllSubjects(){
+        List<String> subjects = Arrays.stream(Subject.values())
+                .map(subject -> subject.name)
+                .collect(Collectors.toList());
+        return subjects;
+    }
+
+    public static Subject findEnumByName(String selectedSubject){
+        Subject subjectFound = null;
+        for (Subject subject: Subject.values()){
+            if (subject.name.equals(selectedSubject)){
+                subjectFound = subject;
+                break;
+            }
+        }
+        return subjectFound;
     }
 
 

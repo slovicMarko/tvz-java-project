@@ -1,14 +1,8 @@
 package hr.production.slovic_projektni.controllers;
 
-import hr.production.slovic_projektni.MainApplication;
-import hr.production.slovic_projektni.model.Subject;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.layout.RowConstraints;
-
-import java.io.IOException;
 
 public class NewScreenController {
 
@@ -30,8 +24,6 @@ public class NewScreenController {
             gridPaneRowWithButtons.setPrefHeight(220);
             loginView.setVisible(true);
         }
-
-
     }
 
     public void showRegisterView(){
@@ -46,13 +38,6 @@ public class NewScreenController {
     }
 
     public void showProjectSearchPage(){
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("projectSearch.fxml"));
-        try{
-            Scene scene = new Scene(fxmlLoader.load(), 1057, 600);
-            MainApplication.getMainStage().setScene(scene);
-            MainApplication.getMainStage().show();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        NavigationMethods.goToProjectSearchPage();
     }
 }

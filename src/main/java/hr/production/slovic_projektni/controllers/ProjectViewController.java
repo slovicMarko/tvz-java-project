@@ -65,8 +65,6 @@ public class ProjectViewController implements Initializable{
 
                 commentsGrid.add(commentCard, column, row++);
                 GridPane.setMargin(commentCard, new Insets(10));
-
-
             }
         } catch (IOException e) {
             String errorMessage = "Error while adding comments";
@@ -77,18 +75,7 @@ public class ProjectViewController implements Initializable{
     }
 
     public void backButton() {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("projectSearch.fxml"));
-
-        try {
-            Scene scene = new Scene(fxmlLoader.load(), 1057, 600);
-            MainApplication.getMainStage().setScene(scene);
-            MainApplication.getMainStage().show();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        NavigationMethods.goToProjectSearchPage();
     }
 
     public void addCommentButton(){
