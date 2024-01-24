@@ -1,12 +1,12 @@
 package hr.production.slovic_projektni.controllers;
 
 
+import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.model.ProjectView;
 import hr.production.slovic_projektni.model.Subject;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.utils.DatabaseUtilProject;
-import hr.production.slovic_projektni.utils.FileUtils;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ProjectSearchController {
@@ -60,8 +61,6 @@ public class ProjectSearchController {
     }
 
     public void applyButton(){
-
-        //List<Project> projects = FileUtils.getProjects();
 
         List<Project> projects = DatabaseUtilProject.getProjects();
 

@@ -3,6 +3,7 @@ package hr.production.slovic_projektni.model;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -35,6 +36,13 @@ public class User extends NamedEntity {
         this.lastName = lastName;
         this.userRole = userRole;
         this.username = username;
+    }
+
+    public User(Long id, String username, String passwordHash, UserRole userRole) {
+        super(id);
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.userRole = userRole;
     }
 
     public static String hashPassword(String password){
@@ -94,7 +102,4 @@ public class User extends NamedEntity {
     }
 
 
-    public static class UserBuilder{
-
-    }
 }

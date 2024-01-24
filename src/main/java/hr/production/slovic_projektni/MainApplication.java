@@ -1,10 +1,9 @@
 package hr.production.slovic_projektni;
 
+import hr.production.slovic_projektni.model.User;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,6 +11,16 @@ import java.io.IOException;
 public class MainApplication extends Application {
 
     public static Stage mainStage;
+
+    public static User activeUser;
+
+    public static User getActiveUser() {
+        return activeUser;
+    }
+
+    public static void setActiveUser(User user) {
+        MainApplication.activeUser = user;
+    }
 
     @Override
     public void start(Stage stage) throws IOException {

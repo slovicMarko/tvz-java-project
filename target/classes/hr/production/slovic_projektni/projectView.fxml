@@ -75,8 +75,8 @@
                        </rowConstraints>
                         <children>
                            <Label fx:id="descriptionLabel1" text="Leave comment: " />
-                           <TextArea fx:id="commentTextArea" prefHeight="136.0" prefWidth="352.0" GridPane.rowIndex="1" GridPane.rowSpan="2" />
-                           <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addCommentButton" prefHeight="32.0" prefWidth="96.0" text="Add comment" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                           <TextArea fx:id="commentTextArea" disable="true" prefHeight="136.0" prefWidth="352.0" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                           <Button fx:id="addComment" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addCommentButton" prefHeight="32.0" prefWidth="96.0" text="Add comment" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
                               <GridPane.margin>
                                  <Insets left="10.0" />
                               </GridPane.margin>

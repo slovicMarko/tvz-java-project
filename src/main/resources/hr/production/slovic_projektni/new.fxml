@@ -6,13 +6,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.production.slovic_projektni.controllers.NewScreenController">
     <fx:include source="menuBar.fxml" />
-   <GridPane layoutY="24.0" prefHeight="576.0" prefWidth="800.0">
+   <GridPane layoutY="33.0" prefWidth="800.0">
      <columnConstraints>
        <ColumnConstraints hgrow="SOMETIMES" maxWidth="423.0" minWidth="10.0" prefWidth="399.0" />
        <ColumnConstraints hgrow="SOMETIMES" maxWidth="405.0" minWidth="10.0" prefWidth="401.0" />
@@ -20,8 +19,8 @@
      <rowConstraints>
        <RowConstraints maxHeight="131.0" minHeight="10.0" prefHeight="115.0" vgrow="NEVER" />
          <RowConstraints maxHeight="160.0" minHeight="0.0" prefHeight="59.0" vgrow="NEVER" />
-       <RowConstraints fx:id="gridPaneRowWithForm" maxHeight="433.0" minHeight="0.0" prefHeight="120.0" vgrow="NEVER" />
-         <RowConstraints fx:id="gridPaneRowWithButtons" maxHeight="394.0" minHeight="0.0" prefHeight="282.0" vgrow="SOMETIMES" />
+       <RowConstraints fx:id="gridPaneRowWithForm" maxHeight="-Infinity" minHeight="-Infinity" vgrow="ALWAYS" />
+         <RowConstraints fx:id="gridPaneRowWithButtons" minHeight="136.0" vgrow="NEVER" />
      </rowConstraints>
       <children>
          <Label text="ProjectHelper" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
@@ -37,34 +36,43 @@
                <Insets top="10.0" />
             </GridPane.margin>
          </Label>
-         <Pane maxHeight="300.0" maxWidth="300.0" minHeight="300.0" minWidth="300.0" prefHeight="300.0" prefWidth="300.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BASELINE">
-             <children>
-                 <fx:include fx:id="loginView" source="loginView.fxml" visible="false" />
-                 <fx:include fx:id="registerView" source="registerView.fxml" visible="false" />
-             </children>
-         </Pane>
-         <GridPane maxWidth="300.0" prefHeight="84.0" prefWidth="300.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+         <GridPane fx:id="gridPaneButtons" maxHeight="-Infinity" maxWidth="300.0" minWidth="-Infinity" prefWidth="300.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" GridPane.vgrow="ALWAYS">
            <columnConstraints>
              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
            </columnConstraints>
            <rowConstraints>
-             <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-             <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
+             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
            </rowConstraints>
             <children>
                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showRegisterView" prefWidth="100.0" text="Register" GridPane.columnIndex="1">
                   <GridPane.margin>
-                     <Insets left="5.0" />
+                     <Insets bottom="5.0" left="5.0" />
                   </GridPane.margin>
                </Button>
-               <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProjectSearchPage" prefHeight="26.0" prefWidth="210.0" text="Continue as guest" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+               <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProjectSearchPage" prefHeight="26.0" prefWidth="210.0" text="Continue as guest" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                  <GridPane.margin>
+                     <Insets />
+                  </GridPane.margin>
+               </Button>
                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showLoginView" text="Login" GridPane.halignment="RIGHT">
                   <GridPane.margin>
-                     <Insets right="5.0" />
+                     <Insets bottom="5.0" right="5.0" />
                   </GridPane.margin>
                </Button>
             </children>
+            <GridPane.margin>
+               <Insets top="10.0" />
+            </GridPane.margin>
+         </GridPane>
+         <GridPane fx:id="gridPaneContainer" alignment="TOP_CENTER" maxWidth="-Infinity" prefWidth="300.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP">
+           <columnConstraints>
+             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+             <RowConstraints vgrow="ALWAYS" />
+           </rowConstraints>
          </GridPane>
       </children>
    </GridPane>

@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -20,6 +21,7 @@ import javafx.scene.layout.RowConstraints;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -33,9 +35,9 @@ public class ProjectViewController implements Initializable{
     @FXML GridPane commentsGrid;
     @FXML RowConstraints commentsRowConstraints;
     @FXML TextArea commentTextArea;
+    @FXML Button addComment;
 
     List<Comment> commentList;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {}
 
@@ -45,6 +47,17 @@ public class ProjectViewController implements Initializable{
         titleLabel.setText(project.getName());
         descriptionLabel.setText(project.getDescription());
         authorLabel.setText(project.getAuthor().getFirstName() + " " + project.getAuthor().getLastName());
+
+        User activeUser = MainApplication.getActiveUser();
+        try{
+            if (Optional.of(activeUser).isPresent()){
+                addComment.setDisable(false);
+                commentTextArea.setDisable(false);
+            }
+        } catch (NullPointerException ex){
+            System.out.println("Niste prijavljeni.");
+        }
+
 
         showComments();
     }
@@ -79,7 +92,8 @@ public class ProjectViewController implements Initializable{
     }
 
     public void addCommentButton(){
-        commentList.add(new Comment(new User(Long.parseLong("1"), "Pajo", "Patak", UserRole.ADMIN, "pajo"),
+        addComment.setDisable(false);
+        commentList.add(new Comment(MainApplication.getActiveUser(),
                 commentTextArea.getText(), 0));
         showComments();
 
