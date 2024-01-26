@@ -11,7 +11,7 @@ import java.io.IOException;
 public interface ProjectView {
 
     static void showProjectView(Project project){
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("projectView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("project-view.fxml"));
 
         try {
 

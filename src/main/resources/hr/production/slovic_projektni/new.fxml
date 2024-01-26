@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.production.slovic_projektni.controllers.NewScreenController">
-    <fx:include source="menuBar.fxml" />
+    <fx:include source="menu-bar.fxml" />
    <GridPane layoutY="33.0" prefWidth="800.0">
      <columnConstraints>
        <ColumnConstraints hgrow="SOMETIMES" maxWidth="423.0" minWidth="10.0" prefWidth="399.0" />
@@ -56,7 +56,7 @@
                      <Insets />
                   </GridPane.margin>
                </Button>
-               <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showLoginView" text="Login" GridPane.halignment="RIGHT">
+               <Button fx:id="loginBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showLoginView" text="Login" GridPane.halignment="RIGHT">
                   <GridPane.margin>
                      <Insets bottom="5.0" right="5.0" />
                   </GridPane.margin>

@@ -40,7 +40,7 @@
                         <Insets right="16.0" />
                      </HBox.margin>
                   </Label>
-                  <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#likeButtonClicked" prefWidth="50.0" text="Like" />
+                  <Button fx:id="likeButton" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#likeButtonClicked" prefWidth="50.0" text="Like" />
                </children>
             </HBox>
          </children>

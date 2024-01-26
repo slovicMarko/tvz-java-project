@@ -10,16 +10,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -32,10 +42,12 @@ public class ProjectViewController implements Initializable{
     @FXML Label titleLabel;
     @FXML Label descriptionLabel;
     @FXML Label authorLabel;
+    @FXML Label fileNameLabel;
     @FXML GridPane commentsGrid;
     @FXML RowConstraints commentsRowConstraints;
     @FXML TextArea commentTextArea;
     @FXML Button addComment;
+    @FXML Button addFile;
 
     List<Comment> commentList;
     @Override
@@ -52,6 +64,7 @@ public class ProjectViewController implements Initializable{
         try{
             if (Optional.of(activeUser).isPresent()){
                 addComment.setDisable(false);
+                addFile.setDisable(false);
                 commentTextArea.setDisable(false);
             }
         } catch (NullPointerException ex){
@@ -96,7 +109,34 @@ public class ProjectViewController implements Initializable{
         commentList.add(new Comment(MainApplication.getActiveUser(),
                 commentTextArea.getText(), 0));
         showComments();
+    }
 
+    public void addFileButton() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose File");
+        configureFileChooser(fileChooser);
+        FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("window.fxml"));
+        Parent newSceneRoot = null;
+        try {
+            newSceneRoot = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Scene newScene = new Scene(newSceneRoot, 300, 200);
+        var selectedFile = fileChooser.showOpenDialog(newScene.getWindow());
+        if (selectedFile != null) {
+            System.out.println("Selected File: " + selectedFile.getAbsolutePath());
+            fileNameLabel.setText(selectedFile.getAbsolutePath());
+//            InputStream stream = new FileInputStream(selectedFile.getPath());
+//            Image image = new Image(stream);
+//            imageView.setImage(image);
+        }
+    }
+
+    private void configureFileChooser(FileChooser fileChooser) {
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
     }
 
 }

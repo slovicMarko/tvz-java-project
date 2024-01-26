@@ -38,11 +38,10 @@ public class User extends NamedEntity {
         this.username = username;
     }
 
-    public User(Long id, String username, String passwordHash, UserRole userRole) {
+    public User(Long id, String username, String passwordHash) {
         super(id);
         this.username = username;
         this.passwordHash = passwordHash;
-        this.userRole = userRole;
     }
 
     public static String hashPassword(String password){

@@ -22,6 +22,11 @@ public class MainApplication extends Application {
         MainApplication.activeUser = user;
     }
 
+    public static void logoutUser() {
+        MainApplication.activeUser = null;
+    }
+
+
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;

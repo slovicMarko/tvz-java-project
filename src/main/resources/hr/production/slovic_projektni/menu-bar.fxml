@@ -10,8 +10,9 @@
         <menus>
          <Menu mnemonicParsing="false" text="User">
            <items>
-             <MenuItem mnemonicParsing="false" text="Manage users" />
-               <MenuItem mnemonicParsing="false" text="Log out" />
+             <MenuItem fx:id="manageUsersAdmin" disable="true" mnemonicParsing="false" onAction="#showManageUsers" text="Manage users" />
+               <MenuItem fx:id="editProfile" disable="true" mnemonicParsing="false" onAction="#showEditProfileScreen" text="Edit profile" />
+               <MenuItem mnemonicParsing="false" onAction="#showLoginScreen" text="Log out" />
            </items>
          </Menu>
             <Menu mnemonicParsing="false" text="Problem">

@@ -1,7 +1,6 @@
 package hr.production.slovic_projektni.controllers;
 
 
-import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.model.ProjectView;
 import hr.production.slovic_projektni.model.Subject;
@@ -42,37 +41,40 @@ public class ProjectSearchController {
 
         setChoiceBoxes();
 
-        //List<Project> projects1 = FileUtils.getProjects();
-
         List<Project> projects = DatabaseUtilProject.getProjects();
         ObservableList<Project> observableProjectsList = FXCollections.observableArrayList(projects);
 
         projectTableView.setItems(observableProjectsList);
         initializeTableColumns();
 
-        projectTableView.setOnMouseClicked((event)-> {
-            if (event.getClickCount() == 2){
-                Project selectedProject = projectTableView.getSelectionModel().getSelectedItem();
 
-                ProjectView.showProjectView(selectedProject);
+        projectTableView.setOnMouseClicked((event)-> {
+            try{
+                if (event.getClickCount() == 2 && Optional.of(projectTableView.getSelectionModel().getSelectedItem()).isPresent()){
+
+                    Project selectedProject = projectTableView.getSelectionModel().getSelectedItem();
+                    ProjectView.showProjectView(selectedProject);
+                }
+            } catch (Exception e){
+                System.out.println("eksepsn");
             }
+
         });
 
     }
 
     public void applyButton(){
-
         List<Project> projects = DatabaseUtilProject.getProjects();
-
         List<Subject> subjects = Arrays.stream(Subject.values()).toList();
 
         List<Subject> filteredSubjects = subjects.stream()
-                .filter(subject -> subject.getProfessorName()==professorFilterChoiceBox.getValue())
+                .filter(subject -> professorFilterChoiceBox.getValue()== null ||
+                        professorFilterChoiceBox.getValue()== " Default"  ||
+                        subject.getProfessorName()==professorFilterChoiceBox.getValue())
+                .filter(subject -> subjectFilterChoiceBox.getValue()==null ||
+                        subjectFilterChoiceBox.getValue()==" Default" ||
+                        subject.getName()==subjectFilterChoiceBox.getValue())
                 .collect(Collectors.toList());
-
-        for (Subject subject : filteredSubjects){
-            System.out.println(subject.getName());
-        }
 
         List<Project> filteredProjects =  projects.stream()
                 .filter(project -> filteredSubjects.contains(project.getSubject()))
@@ -89,7 +91,9 @@ public class ProjectSearchController {
                 .map(Subject::getName)
                 .collect(Collectors.toList());
 
+        subjectNames.add(0, " Default");
         List<String> professorNames = new ArrayList<>();
+        professorNames.add(" Default");
 
         for (Subject subject : subjects){
             if (!professorNames.contains(subject.getProfessorName())){

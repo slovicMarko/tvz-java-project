@@ -18,14 +18,15 @@ public class DatabaseUtilUsers {
 
     public static void saveUser(User newUser){
         try(Connection connection = DatabaseConnection.connectToDatabase()){
-            String insertUserSql = "INSERT INTO USERS (FIRST_NAME, LAST_NAME, USER_ROLE, USERNAME) " +
-                    "VALUES(?, ?, ?, ?)";
+            String insertUserSql = "INSERT INTO USERS (FIRST_NAME, LAST_NAME, USER_ROLE, USERNAME, PASSWORD_HASHED ) " +
+                    "VALUES(?, ?, ?, ?, ?)";
 
             PreparedStatement pstmt = connection.prepareStatement(insertUserSql);
             pstmt.setString(1, newUser.getFirstName());
             pstmt.setString(2, newUser.getLastName());
             pstmt.setString(3, newUser.getUserRole().getName().toUpperCase());
             pstmt.setString(4, newUser.getUsername());
+            pstmt.setString(5, newUser.getPasswordHash());
             pstmt.execute();
 
         } catch (SQLException | IOException ex){
@@ -55,26 +56,29 @@ public class DatabaseUtilUsers {
     }
 
     public static User activeUser(User user) {
-        String firstName;
-        String lastName;
+        Long id;
+        String firstName, lastName;
+        UserRole userRole;
         try (Connection connection = DatabaseConnection.connectToDatabase()) {
-            String sqlQuery = "SELECT FIRST_NAME, LAST_NAME\n" +
+            String sqlQuery = "SELECT ID, FIRST_NAME, LAST_NAME, USER_ROLE\n" +
                     "FROM USERS  \n" +
-                    "WHERE ID = ?;";
+                    "WHERE USERNAME = ?;";
 
             PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setLong(1, user.getId());
+            pstmt.setString(1, user.getUsername());
             pstmt.executeQuery();
             ResultSet resultSet = pstmt.getResultSet();
 
             resultSet.next();
+            id = resultSet.getLong("ID");
+            userRole = UserRole.valueOf(resultSet.getString("USER_ROLE").toUpperCase());
             firstName = resultSet.getString("FIRST_NAME");
             lastName = resultSet.getString("LAST_NAME");
 
         } catch (SQLException | IOException ex) {
             throw new RuntimeException(ex);
         }
-        return new User(user.getId(), firstName, lastName, user.getUsername(), user.getPasswordHash(), user.getUserRole());
+        return new User(id, firstName, lastName, user.getUsername(), user.getPasswordHash(), userRole);
     }
 
 

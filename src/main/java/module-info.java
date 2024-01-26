@@ -2,7 +2,7 @@ module hr.production.slovic_projektni {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    //requires org.slf4j;
+    requires org.slf4j;
 
 
     opens hr.production.slovic_projektni to javafx.fxml;

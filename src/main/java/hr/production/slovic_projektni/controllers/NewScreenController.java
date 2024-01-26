@@ -9,13 +9,17 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.security.Key;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Properties;
@@ -24,13 +28,16 @@ public class NewScreenController {
 
     @FXML private RowConstraints gridPaneRowWithButtons;
     @FXML private GridPane gridPaneContainer;
+    @FXML private Button loginBtn;
 
-    private static final String LOGIN_VIEW = "loginView.fxml";
-    private static final String REGISTER_VIEW = "registerView.fxml";
+    private static final String LOGIN_VIEW = "login-view.fxml";
+    private static final String REGISTER_VIEW = "register-view.fxml";
     private Boolean loginView = true;
     private Boolean registerView = true;
 
-    public void initialize() {}
+
+    public void initialize() {
+    }
 
     public void showLoginView() {
         gridPaneRowWithButtons.setMinHeight(0);
