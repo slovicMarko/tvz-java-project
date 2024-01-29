@@ -26,39 +26,14 @@ public class ManageUsersController {
     public static List<User> selectedUserList = new ArrayList<>();
 
 
-    public void initialize(){
-        showUsers();
+    public void initialize() {
+        CardMethodGeneric.showCardsOnGridPane("user-to-manage.fxml", DatabaseUtilUsers.getUsersList(), usersGrid);
     }
 
     public void saveButtonClicked(){
         DatabaseUtilUsers.saveManageUsersSettings(selectedUserList);
         selectedUserList.clear();
         NavigationMethods.goToProjectSearchPage();
-    }
-
-
-    private void showUsers(){
-        List<User> userList = DatabaseUtilUsers.getUsersList();
-
-        int column = 0;
-        int row = 1;
-
-        try {
-            for (User user : userList) {
-                FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("user-to-manage.fxml"));
-
-                HBox card = fxmlLoader.load();
-                UserToManageController userToManageController = fxmlLoader.getController();
-                userToManageController.initialize(user);
-
-                usersGrid.add(card, column, row++);
-                GridPane.setMargin(card, new Insets(10));
-            }
-        } catch (IOException e) {
-            String message = "Error while listing users in \"Manage users\"";
-            logger.error(message, e);
-            throw new FxmlLoadException(message, e);
-        }
     }
 
 }

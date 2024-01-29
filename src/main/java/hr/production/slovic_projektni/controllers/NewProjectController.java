@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import java.util.Optional;
 
 
-public class NewProjectController {
+public class NewProjectController implements CustomInitializable {
 
     @FXML private TextArea projectDescriptionTextArea;
     @FXML private TextField projectNameTextField;
@@ -27,14 +27,14 @@ public class NewProjectController {
         subjectChoiceBox.setOnAction(event -> selectedSubject = Subject.findEnumByName(subjectChoiceBox.getValue()));
     }
 
-    public void initialize(Project project){
+    public <T> void initialize(T project){
         titleLabel.setText("Edit project");
         confirmButton.setText("Save changes");
 
-        projectInProgress = project;
-        projectNameTextField.setText(project.getName());
-        projectDescriptionTextArea.setText(project.getDescription());
-        subjectChoiceBox.setValue(project.getSubject().getName());
+        projectInProgress = (Project) project;
+        projectNameTextField.setText(((Project) project).getName());
+        projectDescriptionTextArea.setText(((Project) project).getDescription());
+        subjectChoiceBox.setValue(((Project) project).getSubject().getName());
 
     }
 
@@ -71,6 +71,5 @@ public class NewProjectController {
 
 
     }
-
 
 }

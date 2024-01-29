@@ -65,7 +65,7 @@ public class ProjectSearchController {
     private void selectingClickedProject() {
         Project selectedProject = projectTableView.getSelectionModel().getSelectedItem();
         if (selectedProject != null){
-            ProjectView.showProjectView(selectedProject);
+            NavigationMethods.showProjectView(selectedProject);
         } else {
             throw new ClickedOnInvalidContentException("Clicked outside of the projects table.");
         }

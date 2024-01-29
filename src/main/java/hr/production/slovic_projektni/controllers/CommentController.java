@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 
 import java.util.Optional;
 
-public class CommentController {
+public class CommentController implements CustomInitializable{
 
     @FXML private Label commentAuthor;
     @FXML private Label commentSolution;
@@ -19,9 +19,9 @@ public class CommentController {
 
     Comment baseComment;
 
-    public void initialize(Comment comment){
-        baseComment = comment;
-        setData(comment);
+    public <T> void initialize(T comment){
+        baseComment = (Comment) comment;
+        setData(baseComment);
     }
 
     public void setData(Comment comment){

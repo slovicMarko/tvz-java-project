@@ -5,18 +5,15 @@ import hr.production.slovic_projektni.exception.FxmlLoadException;
 import hr.production.slovic_projektni.model.Comment;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.User;
-import hr.production.slovic_projektni.model.UserRole;
 import hr.production.slovic_projektni.sort.CommentSorter;
 import hr.production.slovic_projektni.utils.DatabaseUtilComment;
 import hr.production.slovic_projektni.utils.DatabaseUtilProject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
@@ -24,21 +21,13 @@ import javafx.stage.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ProjectViewController {
+public class ProjectViewController implements CustomInitializable {
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectViewController.class);
 
@@ -58,15 +47,18 @@ public class ProjectViewController {
     private static Long projectId;
     private static Project projectCopy;
 
-    public void initialize(Project project) {
+    public <T> void initialize(T project) {
         editButton.setVisible(false);
         deleteButton.setVisible(false);
-        projectId = project.getId();
-        projectCopy = project;
-        commentList = project.getComments();
-        titleLabel.setText(project.getName());
-        descriptionLabel.setText(project.getDescription());
-        authorLabel.setText(project.getAuthor().getFirstName() + " " + project.getAuthor().getLastName());
+        if (project instanceof Project){
+            projectCopy = (Project) project;
+            projectId = projectCopy.getId();
+            commentList = projectCopy.getComments();
+            titleLabel.setText(projectCopy.getName());
+            descriptionLabel.setText(projectCopy.getDescription());
+            authorLabel.setText(projectCopy.getAuthor().getFirstName() + " " + projectCopy.getAuthor().getLastName());
+        }
+
 
         User activeUser = MainApplication.getActiveUser();
 
@@ -74,7 +66,7 @@ public class ProjectViewController {
             addComment.setDisable(false);
             addFile.setDisable(false);
             commentTextArea.setDisable(false);
-            if (activeUser.equals(project.getAuthor())){
+            if (activeUser.equals(projectCopy.getAuthor())){
                 editButton.setVisible(true);
                 deleteButton.setVisible(true);
             }
@@ -86,25 +78,7 @@ public class ProjectViewController {
     private void showComments() {
         commentList = commentList.stream().sorted(new CommentSorter()).collect(Collectors.toList());
 
-        int column = 0;
-        int row = 1;
-
-        try {
-            for (Comment comment : commentList) {
-                FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("comment.fxml"));
-
-                HBox commentCard = fxmlLoader.load();
-                CommentController commentController = fxmlLoader.getController();
-                commentController.initialize(comment);
-
-                commentsGrid.add(commentCard, column, row++);
-                GridPane.setMargin(commentCard, new Insets(10));
-            }
-        } catch (IOException e) {
-            String message = "Error while adding list of comments";
-            logger.error(message, e);
-            throw new FxmlLoadException(e);
-        }
+        CardMethodGeneric.showCardsOnGridPane("comment.fxml", commentList, commentsGrid);
     }
 
     public void backButton() {
