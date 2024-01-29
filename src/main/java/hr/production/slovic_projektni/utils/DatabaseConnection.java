@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.Properties;
 
 public class DatabaseConnection {
-    //private static final Logger logger = LoggerFactory.getLogger(DatabaseConnection.class);
 
     private static final String DATABASE_FILE = "db/database.properties";
     private static final String DATABASE_FILE2 = "conf/database.properties";
@@ -20,17 +19,10 @@ public class DatabaseConnection {
         String databaseUrl = svojstva.getProperty("databaseUrl");
         String username = svojstva.getProperty("username");
         String password = svojstva.getProperty("password");
-        Connection connection = DriverManager.getConnection(databaseUrl,
-                username,password);
-        return connection;
+
+        return DriverManager.getConnection(databaseUrl,
+                username, password);
     }
-
-
-
-
-
-
-
 
 
 }

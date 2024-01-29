@@ -16,6 +16,7 @@ import java.util.Optional;
 
 
 public class LoginScreenController {
+    private static final Logger logger = LoggerFactory.getLogger(LoginScreenController.class);
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -23,7 +24,6 @@ public class LoginScreenController {
     private static String usernameString;
     private static String passwordString;
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginScreenController.class);
 
 
     public void initialize(){
@@ -38,22 +38,22 @@ public class LoginScreenController {
 
     public static void loginButtonClicked(){
         String loggingMessage = FileUtilUsers.getLoggedInUser(usernameString, User.hashPassword(passwordString));
-        try{
 
+        try{
             if (Optional.of(MainApplication.getActiveUser()).isPresent()){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(loggingMessage);
-                alert.setContentText("Uspješno ste se prijavili u aplikaciju.");
+                alert.setHeaderText("Login successful");
+                alert.setContentText(loggingMessage);
                 alert.showAndWait();
                 NavigationMethods.goToProjectSearchPage();
             }
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
+            logger.error("Unsuccessful login: " + loggingMessage);
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Neuspješno prijava!");
+            alert.setHeaderText("Unsuccessful login!");
             alert.setContentText(loggingMessage);
             alert.showAndWait();
         }
-
 
     }
 

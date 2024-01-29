@@ -14,6 +14,7 @@ public class MenuController {
 
     @FXML MenuItem manageUsersAdmin;
     @FXML MenuItem editProfile;
+    @FXML MenuItem newProjectMenu;
 
 
     public void initialize(){
@@ -23,6 +24,7 @@ public class MenuController {
             }
             if (Optional.of(MainApplication.getActiveUser().getUserRole()).isPresent()){
                 editProfile.setDisable(false);
+                newProjectMenu.setDisable(false);
             }
         } catch (NullPointerException ex){}
     }

@@ -60,17 +60,16 @@ public enum Subject {
         this.professorName = professorName;
     }
 
-    public static List<String> getAllSubjects(){
-        List<String> subjects = Arrays.stream(Subject.values())
+    public static List<String> getAllSubjects() {
+        return Arrays.stream(Subject.values())
                 .map(subject -> subject.name)
                 .collect(Collectors.toList());
-        return subjects;
     }
 
-    public static Subject findEnumByName(String selectedSubject){
+    public static Subject findEnumByName(String selectedSubject) {
         Subject subjectFound = null;
-        for (Subject subject: Subject.values()){
-            if (subject.name.equals(selectedSubject)){
+        for (Subject subject : Subject.values()) {
+            if (subject.name.equals(selectedSubject)) {
                 subjectFound = subject;
                 break;
             }

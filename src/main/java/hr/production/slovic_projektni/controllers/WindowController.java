@@ -6,8 +6,6 @@ import javafx.scene.image.ImageView;
 
 public class WindowController {
 
-    @FXML private Hyperlink hyperlink;
-    @FXML private ImageView imageView;
 
     public void initialize(){
     }

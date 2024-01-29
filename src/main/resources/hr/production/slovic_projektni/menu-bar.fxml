@@ -15,10 +15,10 @@
                <MenuItem mnemonicParsing="false" onAction="#showLoginScreen" text="Log out" />
            </items>
          </Menu>
-            <Menu mnemonicParsing="false" text="Problem">
+            <Menu mnemonicParsing="false" text="Project">
                 <items>
                     <MenuItem mnemonicParsing="false" onAction="#showProjectSearchPage" text="Search" />
-               <MenuItem mnemonicParsing="false" onAction="#showNewProjectSearchPage" text="New Problem" />
+                    <MenuItem fx:id="newProjectMenu" disable="true" mnemonicParsing="false" onAction="#showNewProjectSearchPage" text="New Project" />
                 </items>
             </Menu>
         </menus>

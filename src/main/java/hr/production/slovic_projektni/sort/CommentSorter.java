@@ -8,6 +8,6 @@ public class CommentSorter implements Comparator<Comment> {
 
     @Override
     public int compare(Comment firstComment, Comment secondComment) {
-        return secondComment.getLikes().compareTo(firstComment.getLikes());
+        return secondComment.getNumberOfLikes().compareTo(firstComment.getNumberOfLikes());
     }
 }

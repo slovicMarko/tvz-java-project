@@ -12,7 +12,7 @@ public class UserToManageController {
 
     @FXML private Label usernameLabel;
     @FXML private Label fullnameLabel;
-    @FXML private ChoiceBox userRoleChoiceBox;
+    @FXML private ChoiceBox<UserRole> userRoleChoiceBox;
     @FXML private CheckBox userCheckBox;
 
 
@@ -31,7 +31,5 @@ public class UserToManageController {
             else ManageUsersController.selectedUserList.remove(user);
         });
     }
-
-
 
 }

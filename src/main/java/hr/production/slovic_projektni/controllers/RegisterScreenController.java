@@ -1,6 +1,7 @@
 package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.exception.ExistingUserException;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.model.UserRole;
 import hr.production.slovic_projektni.utils.DatabaseUtilUsers;
@@ -9,10 +10,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
-import java.util.Optional;
-
-import static hr.production.slovic_projektni.model.User.hashPassword;
 
 public class RegisterScreenController {
 
@@ -49,7 +46,7 @@ public class RegisterScreenController {
 
         try{
             User newUser = new User(Long.parseLong("1"), firstNameString, lastNameString, usernameString, User.hashPassword(passwordString), UserRole.STUDENT);
-            FileUtilUsers.saveUserToFile(newUser);
+            FileUtilUsers.createUserInFile(usernameString, User.hashPassword(passwordString));
             DatabaseUtilUsers.saveUser(newUser);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Registracija");
@@ -57,14 +54,12 @@ public class RegisterScreenController {
             alert.showAndWait();
             MainApplication.setActiveUser(DatabaseUtilUsers.activeUser(newUser));
             NavigationMethods.goToProjectSearchPage();
-        } catch (Exception e) {
+        } catch (ExistingUserException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Neuspješna registracija!");
             alert.setContentText("Postoji korisnik s istim korisničkim imenom.");
             alert.showAndWait();
         }
-
-        NavigationMethods.goToProjectSearchPage();
     }
 
 

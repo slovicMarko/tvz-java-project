@@ -77,11 +77,10 @@
            <columns>
              <TableColumn fx:id="titleTableColumn" prefWidth="196.0" resizable="false" text="Name" />
              <TableColumn fx:id="descriptionTableColumn" prefWidth="319.0" text="Description" />
-               <TableColumn fx:id="subjectTableColumn" prefWidth="120.0" resizable="false" text="Subject" />
-               <TableColumn fx:id="professorTableColumn" prefWidth="120.0" resizable="false" text="Professor" />
-               <TableColumn fx:id="postingDateTableColumn" prefWidth="154.0" resizable="false" text="Date" />
-               <TableColumn fx:id="likesTableColumn" prefWidth="74.0" resizable="false" text="Likes" />
-               <TableColumn fx:id="dislikesTableColumn" prefWidth="74.0" resizable="false" text="Dislikes" />
+               <TableColumn fx:id="subjectTableColumn" prefWidth="169.0" resizable="false" text="Subject" />
+               <TableColumn fx:id="professorTableColumn" prefWidth="160.0" resizable="false" text="Professor" />
+               <TableColumn fx:id="postingDateTableColumn" prefWidth="119.0" resizable="false" text="Date" />
+               <TableColumn fx:id="commentsTableColumn" prefWidth="100.0" resizable="false" text="Comments" />
            </columns>
             <GridPane.margin>
                <Insets top="24.0" />

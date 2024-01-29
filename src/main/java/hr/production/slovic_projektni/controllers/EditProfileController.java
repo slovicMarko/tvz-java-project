@@ -2,7 +2,10 @@ package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.model.User;
+import hr.production.slovic_projektni.utils.DatabaseUtilUsers;
+import hr.production.slovic_projektni.utils.FileUtilUsers;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -31,12 +34,20 @@ public class EditProfileController {
         User activeUser = MainApplication.getActiveUser();
         if (User.hashPassword(oldPasswordField.getText()).equals(activeUser.getPasswordHash())){
             if (newPasswordField.getText().equals(repeatedPasswordField.getText())){
-                System.out.println("sifra uspjesno promijenjena");
-            }else {
-                System.out.println("sifre se ne podudaraju");
+                FileUtilUsers.changeUserPassword(newPasswordField.getText());
+                DatabaseUtilUsers.changeUserPassword(activeUser.getId(), newPasswordField.getText());
+                NavigationMethods.goToProjectSearchPage();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Password not changed!");
+                alert.setContentText("New password not match repeated.");
+                alert.showAndWait();
             }
-        }else {
-            System.out.println("netocna stara sifra");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Password not changed!");
+            alert.setContentText("Old password isn't correct.");
+            alert.showAndWait();
         }
     }
 

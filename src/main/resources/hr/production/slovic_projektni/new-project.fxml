@@ -28,7 +28,7 @@
          <RowConstraints maxHeight="238.0" minHeight="10.0" prefHeight="119.0" vgrow="SOMETIMES" />
      </rowConstraints>
       <children>
-         <Label text="New Project" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+         <Label fx:id="titleLabel" text="New Project" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
             <font>
                <Font name="System Bold" size="18.0" />
             </font>
@@ -60,7 +60,7 @@
                            <Insets right="5.0" />
                         </HBox.margin>
                      </Button>
-                     <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewProjectButton" prefWidth="150.0" text="Add Project">
+                     <Button fx:id="confirmButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#addNewProjectButton" prefWidth="150.0" text="Add Project">
                         <HBox.margin>
                            <Insets left="5.0" />
                         </HBox.margin>

@@ -2,7 +2,7 @@ package hr.production.slovic_projektni.controllers;
 
 
 import hr.production.slovic_projektni.constants.Constants;
-import hr.production.slovic_projektni.model.ProjectView;
+import hr.production.slovic_projektni.exception.ClickedOnInvalidContentException;
 import hr.production.slovic_projektni.model.Subject;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.utils.DatabaseUtilProject;
@@ -15,16 +15,17 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProjectSearchController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProjectSearchController.class);
 
     @FXML TableView<Project> projectTableView;
     @FXML TableColumn<Project, String> titleTableColumn;
@@ -32,8 +33,7 @@ public class ProjectSearchController {
     @FXML TableColumn<Project, String> subjectTableColumn;
     @FXML TableColumn<Project, String> professorTableColumn;
     @FXML TableColumn<Project, String> postingDateTableColumn;
-    @FXML TableColumn<Project, String> likesTableColumn;
-    @FXML TableColumn<Project, String> dislikesTableColumn;
+    @FXML TableColumn<Project, String> commentsTableColumn;
     @FXML ChoiceBox<String> subjectFilterChoiceBox;
     @FXML ChoiceBox<String> professorFilterChoiceBox;
 
@@ -50,18 +50,27 @@ public class ProjectSearchController {
 
         projectTableView.setOnMouseClicked((event)-> {
             try{
-                if (event.getClickCount() == 2 && Optional.of(projectTableView.getSelectionModel().getSelectedItem()).isPresent()){
-
-                    Project selectedProject = projectTableView.getSelectionModel().getSelectedItem();
-                    ProjectView.showProjectView(selectedProject);
+                if (event.getClickCount() == 2){
+                    selectingClickedProject();
                 }
-            } catch (Exception e){
-                System.out.println("eksepsn");
+            } catch (ClickedOnInvalidContentException ex){
+                logger.error(ex.getMessage());
+                System.out.println(ex.getMessage());
             }
 
         });
 
     }
+
+    private void selectingClickedProject() {
+        Project selectedProject = projectTableView.getSelectionModel().getSelectedItem();
+        if (selectedProject != null){
+            ProjectView.showProjectView(selectedProject);
+        } else {
+            throw new ClickedOnInvalidContentException("Clicked outside of the projects table.");
+        }
+    }
+
 
     public void applyButton(){
         List<Project> projects = DatabaseUtilProject.getProjects();
@@ -69,12 +78,12 @@ public class ProjectSearchController {
 
         List<Subject> filteredSubjects = subjects.stream()
                 .filter(subject -> professorFilterChoiceBox.getValue()== null ||
-                        professorFilterChoiceBox.getValue()== " Default"  ||
-                        subject.getProfessorName()==professorFilterChoiceBox.getValue())
+                        Objects.equals(professorFilterChoiceBox.getValue(), " Default") ||
+                        Objects.equals(subject.getProfessorName(), professorFilterChoiceBox.getValue()))
                 .filter(subject -> subjectFilterChoiceBox.getValue()==null ||
-                        subjectFilterChoiceBox.getValue()==" Default" ||
-                        subject.getName()==subjectFilterChoiceBox.getValue())
-                .collect(Collectors.toList());
+                        Objects.equals(subjectFilterChoiceBox.getValue(), " Default") ||
+                        Objects.equals(subject.getName(), subjectFilterChoiceBox.getValue()))
+                .toList();
 
         List<Project> filteredProjects =  projects.stream()
                 .filter(project -> filteredSubjects.contains(project.getSubject()))
@@ -137,6 +146,12 @@ public class ProjectSearchController {
                 LocalDate postingDate = param.getValue().getStartDate();
                 String postingDateString = postingDate.format(Constants.DATE_TIME_FORMAT);
                 return new ReadOnlyStringWrapper(postingDateString);
+            }
+        });
+        commentsTableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Project, String> param) {
+                return new ReadOnlyStringWrapper(String.valueOf(param.getValue().getComments().size()));
             }
         });
     }

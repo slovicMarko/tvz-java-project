@@ -1,6 +1,7 @@
 package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.exception.FxmlLoadException;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.utils.DatabaseConnection;
 import javafx.fxml.FXML;
@@ -28,7 +29,6 @@ public class NewScreenController {
 
     @FXML private RowConstraints gridPaneRowWithButtons;
     @FXML private GridPane gridPaneContainer;
-    @FXML private Button loginBtn;
 
     private static final String LOGIN_VIEW = "login-view.fxml";
     private static final String REGISTER_VIEW = "register-view.fxml";
@@ -74,7 +74,7 @@ public class NewScreenController {
             gridPaneContainer.add(card, 0, 1);
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FxmlLoadException(e);
         }
         return false;
     }

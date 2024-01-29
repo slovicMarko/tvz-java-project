@@ -46,17 +46,17 @@
                                  <Font name="System Bold" size="16.0" />
                               </font>
                            </Label>
-                           <Label fx:id="descriptionLabel" text="Description" GridPane.rowIndex="1" />
+                           <Label fx:id="descriptionLabel" prefHeight="88.0" prefWidth="398.0" text="Description" wrapText="true" GridPane.rowIndex="1" />
                            <Label fx:id="authorLabel" text="Author" GridPane.rowIndex="2" />
                            <VBox maxWidth="80.0" prefHeight="59.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowSpan="2">
                               <children>
                                  <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#backButton" prefHeight="32.0" prefWidth="86.0" text="Back" />
-                                 <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="86.0" text="Save">
+                                 <Button fx:id="editButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editProjectButton" prefHeight="32.0" prefWidth="86.0" text="Edit">
                                     <VBox.margin>
                                        <Insets bottom="14.0" top="14.0" />
                                     </VBox.margin>
                                  </Button>
-                                 <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="86.0" text="Delete" />
+                                 <Button fx:id="deleteButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#deleteProjectButton" prefHeight="32.0" prefWidth="86.0" text="Delete" />
                               </children>
                               <GridPane.margin>
                                  <Insets right="24.0" />
@@ -76,7 +76,7 @@
                        </rowConstraints>
                         <children>
                            <Label fx:id="descriptionLabel1" text="Leave comment: " />
-                           <TextArea fx:id="commentTextArea" disable="true" prefHeight="136.0" prefWidth="352.0" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                           <TextArea fx:id="commentTextArea" disable="true" prefHeight="136.0" prefWidth="352.0" wrapText="true" GridPane.rowIndex="1" GridPane.rowSpan="2" />
                            <Button fx:id="addComment" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#addCommentButton" prefHeight="32.0" prefWidth="96.0" text="Add comment" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                               <GridPane.margin>
                                  <Insets left="10.0" />

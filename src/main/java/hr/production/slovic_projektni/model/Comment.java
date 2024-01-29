@@ -1,25 +1,52 @@
 package hr.production.slovic_projektni.model;
 
 
-public record Comment(User author, String content, Integer likes) implements LikedComment {
+import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.main.Main;
 
-    @Override
-    public User author() {
+import java.util.List;
+
+public non-sealed class Comment extends NamedEntity implements LikedComment {
+
+    private final User author;
+    private String content;
+    List<Long> likes;
+
+    public Comment(Long id, User author, String content, List<Long> likes) {
+        super(id);
+        this.author = author;
+        this.content = content;
+        this.likes = likes;
+    }
+
+    public User getAuthor() {
         return author;
     }
 
-    @Override
-    public String content() {
+    public String getContent() {
         return content;
     }
 
-    @Override
-    public Integer getLikes() {
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public List<Long> getLikes() {
         return likes;
     }
 
     @Override
-    public Comment submitLike() {
-        return new Comment(author, content, likes+1);
+    public Integer getNumberOfLikes() {
+        return likes.size();
+    }
+
+    @Override
+    public void submitLike() {
+        this.likes.add(MainApplication.activeUser.getId());
+    }
+
+    @Override
+    public void submitDislike() {
+        this.likes.remove(MainApplication.activeUser.getId());
     }
 }
