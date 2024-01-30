@@ -59,7 +59,6 @@ public class ProjectViewController implements CustomInitializable {
             authorLabel.setText(projectCopy.getAuthor().getFirstName() + " " + projectCopy.getAuthor().getLastName());
         }
 
-
         User activeUser = MainApplication.getActiveUser();
 
         if (activeUser != null){
@@ -103,13 +102,13 @@ public class ProjectViewController implements CustomInitializable {
     }
 
 
-
     public void addCommentButton(){
         Long commentId = DatabaseUtilComment.saveComment(MainApplication.getActiveUser().getId(),
                 commentTextArea.getText(),
                 projectId);
 
         if (commentId != null){
+
             commentList.add(new Comment(commentId ,MainApplication.getActiveUser(),
                     commentTextArea.getText(), new ArrayList<>()));
             showComments();

@@ -102,7 +102,7 @@
                      </GridPane>
                   </children>
                   <padding>
-                     <Insets left="10.0" />
+                     <Insets bottom="64.0" left="10.0" />
                   </padding>
                </GridPane>
             </content>

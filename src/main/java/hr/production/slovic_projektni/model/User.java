@@ -3,13 +3,15 @@ package hr.production.slovic_projektni.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class User extends NamedEntity {
+public class User extends NamedEntity implements Serializable, Cloneable {
 
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
@@ -28,14 +30,6 @@ public class User extends NamedEntity {
         this.username = username;
         this.passwordHash = passwordHash;
         this.userRole = userRole;
-    }
-
-    public User(Long id, String firstName, String lastName, UserRole userRole, String username) {
-        super(id);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userRole = userRole;
-        this.username = username;
     }
 
     public User(Long id, String username, String passwordHash) {
@@ -100,5 +94,27 @@ public class User extends NamedEntity {
         this.userRole = userRole;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(username, user.username) && Objects.equals(passwordHash, user.passwordHash) && userRole == user.userRole;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), firstName, lastName, username, passwordHash, userRole);
+    }
+
+    @Override
+    public User clone() {
+        try {
+            User clone = (User) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

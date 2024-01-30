@@ -3,6 +3,7 @@ package hr.production.slovic_projektni.controllers;
 import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.FxmlLoadException;
 import hr.production.slovic_projektni.model.User;
+import hr.production.slovic_projektni.serialization.SerializableMethods;
 import hr.production.slovic_projektni.utils.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,6 +38,7 @@ public class NewScreenController {
 
 
     public void initialize() {
+        //SerializableMethods.serializeToFileCorrect();
     }
 
     public void showLoginView() {

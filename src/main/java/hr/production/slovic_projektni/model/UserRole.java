@@ -1,6 +1,8 @@
 package hr.production.slovic_projektni.model;
 
-public enum UserRole {
+import java.io.Serializable;
+
+public enum UserRole implements Serializable {
     ADMIN("Admin"),
     PROFESSOR("Professor"),
     STUDENT("Student");

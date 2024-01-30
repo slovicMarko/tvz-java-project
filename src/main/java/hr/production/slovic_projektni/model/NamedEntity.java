@@ -1,8 +1,9 @@
 package hr.production.slovic_projektni.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class NamedEntity {
+public abstract class NamedEntity implements Serializable {
     private Long id;
     private String name;
 

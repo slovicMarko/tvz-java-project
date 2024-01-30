@@ -18,7 +18,7 @@ public interface NavigationMethods {
     static void loadRegularScreen(String screenName){
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(screenName));
         try{
-            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+            Scene scene = new Scene(fxmlLoader.load(), screenName.equals("project-search.fxml") ? 1054 : 800, 600);
             MainApplication.getMainStage().setScene(scene);
             MainApplication.getMainStage().show();
         } catch (IOException e) {
@@ -70,6 +70,9 @@ public interface NavigationMethods {
 
     static void goToNewProjectPage(){
         loadRegularScreen("new-project.fxml");
+    }
+    static void goToChangesPage(){
+        loadRegularScreen("changes.fxml");
     }
 
     static void goToNewProjectPage(Project project){

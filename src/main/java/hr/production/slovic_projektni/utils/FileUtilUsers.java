@@ -3,6 +3,7 @@ package hr.production.slovic_projektni.utils;
 import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.ExistingUserException;
 import hr.production.slovic_projektni.model.User;
+import hr.production.slovic_projektni.model.Username;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

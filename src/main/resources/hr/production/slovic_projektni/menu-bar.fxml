@@ -21,6 +21,11 @@
                     <MenuItem fx:id="newProjectMenu" disable="true" mnemonicParsing="false" onAction="#showNewProjectSearchPage" text="New Project" />
                 </items>
             </Menu>
+         <Menu fx:id="changesMenu" mnemonicParsing="false" text="Changes" visible="false">
+            <items>
+               <MenuItem mnemonicParsing="false" onAction="#showChangesPage" text="Show changes" />
+            </items>
+         </Menu>
         </menus>
     </MenuBar>
 </AnchorPane>

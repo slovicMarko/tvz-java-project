@@ -2,6 +2,8 @@ package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.Subject;
+import hr.production.slovic_projektni.serialization.SerializableMethods;
+import hr.production.slovic_projektni.serialization.SerializableObject;
 import hr.production.slovic_projektni.utils.DatabaseUtilProject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -52,9 +54,15 @@ public class NewProjectController implements CustomInitializable {
                 alert.setContentText("Are you sure you want to make changes?");
                 alert.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.OK){
+
+                        Project oldVersion = projectInProgress.clone();
                         projectInProgress.setName(projectNameTextField.getText());
                         projectInProgress.setDescription(projectDescriptionTextArea.getText());
                         projectInProgress.setSubject(Subject.findEnumByName(subjectChoiceBox.getValue()));
+                        SerializableObject<Project> projectSerializableObject = new SerializableObject.Builder<>(oldVersion)
+                                .withChangedClass(projectInProgress).build();
+
+                        SerializableMethods.serializeToFile(projectSerializableObject);
                         DatabaseUtilProject.updateProject(projectInProgress);
                         NavigationMethods.goToProjectSearchPage();
                     }

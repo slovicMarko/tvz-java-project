@@ -3,6 +3,7 @@ package hr.production.slovic_projektni.utils;
 import hr.production.slovic_projektni.controllers.NavigationMethods;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.model.UserRole;
+import hr.production.slovic_projektni.model.Username;
 import javafx.scene.control.Alert;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
@@ -173,8 +174,10 @@ public class DatabaseUtilUsers {
             String lastName = resultSet.getString("LAST_NAME");
             UserRole userRole = UserRole.valueOf(resultSet.getString("USER_ROLE"));
             String username = resultSet.getString("USERNAME");
+            String password = resultSet.getString("PASSWORD_HASHED");
 
-            users.add(new User(id, firstName, lastName, userRole, username));
+
+            users.add(new User(id, firstName, lastName, username, password, userRole));
         }
     }
 
@@ -205,8 +208,9 @@ public class DatabaseUtilUsers {
             String lastName = resultSet.getString("LAST_NAME");
             UserRole userRole = UserRole.valueOf(resultSet.getString("USER_ROLE"));
             String username = resultSet.getString("USERNAME");
+            String password = resultSet.getString("PASSWORD_HASHED");
 
-            users.put(id, new User(id, firstName, lastName, userRole, username));
+            users.put(id, new User(id, firstName, lastName, username, password, userRole));
         }
     }
 

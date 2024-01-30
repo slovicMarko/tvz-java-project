@@ -1,10 +1,11 @@
 package hr.production.slovic_projektni.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public enum Subject {
+public enum Subject implements Serializable {
 
     ADMINISTRIRANJE_RACUNALNIH_MREZA("Administrianje računalnih mreža", "Dunja Bjelobrk Knežević"),
     ADMINISTRIRANJE_UNIX_SUSTAVA("Administrianje UNIX sustava", "Davor Cafuta"),

@@ -17,6 +17,30 @@ public class DatabaseUtilComment {
     private static final Logger logger = LoggerFactory.getLogger(DatabaseUtilComment.class);
 
 
+    public static void updateCommentContent(Comment comment) {
+        try (Connection connection = DatabaseConnection.connectToDatabase()) {
+            String updateSqlQuery = "UPDATE COMMENT " +
+                    "SET CONTENT = ? " +
+                    "WHERE AUTHOR_ID = ? AND ID = ?";
+
+            PreparedStatement pstmt = connection.prepareStatement(updateSqlQuery);
+            pstmt.setString(1, comment.getContent());
+            pstmt.setLong(2, comment.getAuthor().getId());
+            pstmt.setLong(3, comment.getId());
+            pstmt.executeUpdate();
+
+        } catch (SQLException | IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Unsuccessful save!");
+            alert.setContentText("Your change isn't saved.");
+            alert.showAndWait();
+
+            String message = "Comment is not changed.";
+            logger.error(message);
+
+        }
+    }
+
     public static void updateCommentLikes(Comment comment) {
         try (Connection connection = DatabaseConnection.connectToDatabase()) {
             String updateSqlQuery = "UPDATE COMMENT " +

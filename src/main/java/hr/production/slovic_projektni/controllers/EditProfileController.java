@@ -1,7 +1,10 @@
 package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.model.Comment;
 import hr.production.slovic_projektni.model.User;
+import hr.production.slovic_projektni.serialization.SerializableMethods;
+import hr.production.slovic_projektni.serialization.SerializableObject;
 import hr.production.slovic_projektni.utils.DatabaseUtilUsers;
 import hr.production.slovic_projektni.utils.FileUtilUsers;
 import javafx.fxml.FXML;
@@ -34,6 +37,11 @@ public class EditProfileController {
         User activeUser = MainApplication.getActiveUser();
         if (User.hashPassword(oldPasswordField.getText()).equals(activeUser.getPasswordHash())){
             if (newPasswordField.getText().equals(repeatedPasswordField.getText())){
+                SerializableObject<User> userSerializableObject = new SerializableObject.Builder<>(activeUser)
+                        .withChangedClass(new User(activeUser.getId(), activeUser.getFirstName(), activeUser.getLastName(), activeUser.getUsername(),
+                                User.hashPassword(newPasswordField.getText()),activeUser.getUserRole())).build();
+
+                SerializableMethods.serializeToFile(userSerializableObject);
                 FileUtilUsers.changeUserPassword(newPasswordField.getText());
                 DatabaseUtilUsers.changeUserPassword(activeUser.getId(), newPasswordField.getText());
                 NavigationMethods.goToProjectSearchPage();

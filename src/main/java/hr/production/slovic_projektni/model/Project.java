@@ -1,9 +1,11 @@
 package hr.production.slovic_projektni.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
-public class Project extends NamedEntity {
+public class Project extends NamedEntity implements Serializable, Cloneable {
     private String description;
     private LocalDate startDate;
     private User author;
@@ -57,5 +59,31 @@ public class Project extends NamedEntity {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Project project = (Project) o;
+        return Objects.equals(description, project.description) && Objects.equals(startDate, project.startDate) && Objects.equals(author, project.author) && subject == project.subject && Objects.equals(comments, project.comments);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), description, startDate, author, subject, comments);
+    }
+
+    @Override
+    public Project clone() {
+        try {
+            Project clone = (Project) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
