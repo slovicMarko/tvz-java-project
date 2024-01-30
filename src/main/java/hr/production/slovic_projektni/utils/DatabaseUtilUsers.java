@@ -86,7 +86,7 @@ public class DatabaseUtilUsers {
             pstmt.setString(1, newUser.getFirstName());
             pstmt.setString(2, newUser.getLastName());
             pstmt.setString(3, newUser.getUserRole().getName().toUpperCase());
-            pstmt.setString(4, newUser.getUsername());
+            pstmt.setString(4, newUser.getUsername().username());
             pstmt.setString(5, newUser.getPasswordHash());
             pstmt.execute();
 
@@ -130,7 +130,7 @@ public class DatabaseUtilUsers {
                     "WHERE USERNAME = ?;";
 
             PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
-            pstmt.setString(1, user.getUsername());
+            pstmt.setString(1, user.getUsername().username());
             pstmt.executeQuery();
             ResultSet resultSet = pstmt.getResultSet();
 
@@ -177,7 +177,7 @@ public class DatabaseUtilUsers {
             String password = resultSet.getString("PASSWORD_HASHED");
 
 
-            users.add(new User(id, firstName, lastName, username, password, userRole));
+            users.add(new User(id, firstName, lastName, new Username(username), password, userRole));
         }
     }
 
@@ -210,7 +210,7 @@ public class DatabaseUtilUsers {
             String username = resultSet.getString("USERNAME");
             String password = resultSet.getString("PASSWORD_HASHED");
 
-            users.put(id, new User(id, firstName, lastName, username, password, userRole));
+            users.put(id, new User(id, firstName, lastName, new Username(username), password, userRole));
         }
     }
 

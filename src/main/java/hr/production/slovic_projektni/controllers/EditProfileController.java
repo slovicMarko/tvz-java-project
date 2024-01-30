@@ -26,11 +26,10 @@ public class EditProfileController {
 
     public void initialize(){
         User activeUser = MainApplication.getActiveUser();
-        titleLabel.setText("Edit user: " + activeUser.getUsername());
+        titleLabel.setText("Edit user: " + activeUser.getUsername().username());
         firstNameField.setText(activeUser.getFirstName());
         lastNameField.setText(activeUser.getLastName());
         userRoleField.setText(activeUser.getUserRole().getName());
-
     }
 
     public void saveChangedButton(){

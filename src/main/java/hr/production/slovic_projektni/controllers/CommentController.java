@@ -93,7 +93,7 @@ public class CommentController<T> implements CustomInitializable{
 
 
     public void likeButtonClicked(){
-        Comment oldComment = new Comment(baseComment.getId(), baseComment.getAuthor(), baseComment.getContent(), new ArrayList<>(baseComment.getLikes()));
+        Comment oldComment = new Comment(baseComment.getId(), baseComment.getAuthor(), baseComment.getContent(), baseComment.getPostDate(), new ArrayList<>(baseComment.getLikes()));
 
         SerializableObject<Comment> commentSerializableObject = new SerializableObject.Builder<>(oldComment).build();
         if (baseComment.getLikes().contains(MainApplication.getActiveUser().getId())){

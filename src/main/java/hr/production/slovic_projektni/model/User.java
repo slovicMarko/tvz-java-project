@@ -15,15 +15,13 @@ public class User extends NamedEntity implements Serializable, Cloneable {
 
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
-    private static final Pattern VALID_USERNAME_PATTERN = Pattern.compile("^[A-Za-z0-9\\-_ ]{4,32}$");
-
     private String firstName;
     private String lastName;
-    private String username;
+    private Username username;
     private String passwordHash;
     private UserRole userRole;
 
-    public User(Long id, String firstName, String lastName, String username, String passwordHash, UserRole userRole) {
+    public User(Long id, String firstName, String lastName, Username username, String passwordHash, UserRole userRole) {
         super(id);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,11 +30,16 @@ public class User extends NamedEntity implements Serializable, Cloneable {
         this.userRole = userRole;
     }
 
-    public User(Long id, String username, String passwordHash) {
+    public User(Long id, Username username, String passwordHash) {
         super(id);
         this.username = username;
         this.passwordHash = passwordHash;
     }
+
+    public User() {
+        super(Long.parseLong("1"));
+    }
+
 
     public static String hashPassword(String password) {
         try {
@@ -47,9 +50,8 @@ public class User extends NamedEntity implements Serializable, Cloneable {
                     .encode(digest));
         } catch (NoSuchAlgorithmException e) {
             String m = "System doesn't support SHA-256";
-            //logger.error(m);
+            logger.error(m);
 
-            //throw new UnsupportedAlgorithmException(m, e);
         }
         return password;
     }
@@ -70,13 +72,10 @@ public class User extends NamedEntity implements Serializable, Cloneable {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
+    public Username getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getPasswordHash() {
         return passwordHash;

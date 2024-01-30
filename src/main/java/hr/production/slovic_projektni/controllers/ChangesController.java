@@ -81,15 +81,25 @@ public class ChangesController<T> {
      }
 
      private String selectedUser(User user){
-          return "Class: User " +
-                  "\n\nName: " + user.getFirstName() + " " + user.getLastName() +
-                  "\n\nUsername: " + user.getUsername() +
+          if (user.getFirstName() == null){
+               return "Name: " +
+                       "\n\nUsername: " +
+                       "\n\nRole: " +
+                       "\n\nHashed password: ";
+          }
+          return "Name: " + user.getFirstName() + " " + user.getLastName() +
+                  "\n\nUsername: " + user.getUsername().username() +
                   "\n\nRole: " + user.getUserRole().getName() +
                   "\n\nHashed password: " + user.getPasswordHash();
+
      }
      private String selectedComment(Comment comment){
-          String formatedString = "Class: Comment " +
-                  "\n\nAuthor: " + comment.getAuthor().getFirstName() + " " + comment.getAuthor().getLastName() +
+          if (comment.getContent() == null){
+               return "Author: " +
+                       "\n\nContent: " +
+                       "\n\nUsers like this: \n";
+          }
+          String formatedString = "Author: " + comment.getAuthor().getFirstName() + " " + comment.getAuthor().getLastName() +
                   "\n\nContent: " + comment.getContent() +
                   "\n\nUsers like this: \n";
           Map<Long, User> userMap = DatabaseUtilUsers.getUsersMap();
@@ -100,14 +110,17 @@ public class ChangesController<T> {
      }
 
      private String selectedProject(Project project){
-          String formatedString = "Class: Project " +
-                  "\n\nAuthor: " + project.getAuthor().getFirstName() + " " + project.getAuthor().getLastName() +
+          if (project.getName().isEmpty()){
+               return "Author: " +
+                       "\n\nName: " +
+                       "\n\nDescription: " +
+                       "\n\nSubject: " +
+                       "\n\nNumber of Comments: ";
+          } return "Author: " + project.getAuthor().getFirstName() + " " + project.getAuthor().getLastName() +
                   "\n\nName: " + project.getName() +
                   "\n\nDescription: " + project.getDescription() +
                   "\n\nSubject: " + project.getSubject().getName() + ", " + project.getSubject().getProfessorName() +
                   "\n\nNumber of Comments: " + project.getComments().size();
-
-          return formatedString;
      }
 
 
@@ -161,6 +174,9 @@ public class ChangesController<T> {
      }
 
      public String findAttributesUser(SerializableObject<User> users){
+          if (users.getOriginal().getFirstName() == null){
+               return "New User";
+          }
           if (!(users.getOriginal().getFirstName()+users.getOriginal().getLastName())
                   .equals((users.getChanged().getFirstName()+users.getChanged().getLastName()))){
                return  "Name";
@@ -177,6 +193,9 @@ public class ChangesController<T> {
      }
 
      public String findAttributesComment(SerializableObject<Comment> comments){
+          if (comments.getOriginal().getContent() == null){
+               return "New Comment";
+          }
           if (!comments.getOriginal().getContent()
                   .equals(comments.getChanged().getContent())){
                return "Content";
@@ -189,6 +208,9 @@ public class ChangesController<T> {
      }
 
      public String findAttributesProject(SerializableObject<Project> projects){
+          if (projects.getOriginal().getName().isEmpty()){
+               return "New Project";
+          }
           String string = "";
           if (!projects.getOriginal().getSubject()
                   .equals(projects.getChanged().getSubject())){

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -143,7 +144,7 @@ public class ProjectSearchController {
         postingDateTableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Project, String> param) {
-                LocalDate postingDate = param.getValue().getStartDate();
+                LocalDateTime postingDate = param.getValue().getPostDate().postDate();
                 String postingDateString = postingDate.format(Constants.DATE_TIME_FORMAT);
                 return new ReadOnlyStringWrapper(postingDateString);
             }

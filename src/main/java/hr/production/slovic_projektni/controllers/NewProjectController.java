@@ -1,5 +1,7 @@
 package hr.production.slovic_projektni.controllers;
 
+import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.model.DateAndTime;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.Subject;
 import hr.production.slovic_projektni.serialization.SerializableMethods;
@@ -9,6 +11,8 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 
 
@@ -59,6 +63,7 @@ public class NewProjectController implements CustomInitializable {
                         projectInProgress.setName(projectNameTextField.getText());
                         projectInProgress.setDescription(projectDescriptionTextArea.getText());
                         projectInProgress.setSubject(Subject.findEnumByName(subjectChoiceBox.getValue()));
+
                         SerializableObject<Project> projectSerializableObject = new SerializableObject.Builder<>(oldVersion)
                                 .withChangedClass(projectInProgress).build();
 
@@ -69,11 +74,19 @@ public class NewProjectController implements CustomInitializable {
                 });
             }
         } catch (NullPointerException e){
-            DatabaseUtilProject.saveProject(
+            Project newProject = new Project(Long.parseLong("0"),
                     projectNameTextField.getText(),
                     projectDescriptionTextArea.getText(),
-                    selectedSubject
-            );
+                    new DateAndTime(LocalDateTime.now()),
+                    MainApplication.getActiveUser(),
+                    selectedSubject,
+                    new ArrayList<>());
+
+            SerializableObject<Project> projectSerializableObject = new SerializableObject.Builder<>(new Project())
+                    .withChangedClass(newProject).build();
+
+            SerializableMethods.serializeToFile(projectSerializableObject);
+            DatabaseUtilProject.saveProject(newProject);
             NavigationMethods.goToProjectSearchPage();
         }
 

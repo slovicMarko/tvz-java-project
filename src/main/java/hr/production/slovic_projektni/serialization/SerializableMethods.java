@@ -13,7 +13,7 @@ public interface SerializableMethods {
     String SERIALIZABLE_FILE_NAME = "data/changes.dat";
 
     static <T> void serializeToFile(SerializableObject<T> serializableObject) {
-        //List<SerializableObject<T>> serializableObjects = new ArrayList<>();
+        //List<SerializableObject<T>> serializableObjects = new ArrayList<>(); //za prvu
         List<SerializableObject<T>> serializableObjects = SerializableMethods.deserializeFromFile();
         serializableObjects.add(serializableObject);
 
@@ -21,38 +21,11 @@ public interface SerializableMethods {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)){
 
             objectOutputStream.writeObject(serializableObjects);
-            System.out.println("Serialization successful!");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-/*
-    static <T> void serializeToFileCorrect() {
-        SerializableObject<T> serializableObject = null;
-        List<SerializableObject<T>> serializableObjects = SerializableMethods.deserializeFromFile();
-        for (SerializableObject<T> s : serializableObjects){
-            if (s.getChanged() instanceof Project){
-                serializableObject = s;
-            }
-        }
-        if (serializableObject != null){
-            serializableObjects.remove(serializableObject);
-        }
-
-        try(FileOutputStream fileOutputStream = new FileOutputStream(SERIALIZABLE_FILE_NAME);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)){
-
-            objectOutputStream.writeObject(serializableObjects);
-            System.out.println("Serialization successful!");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
- */
 
     static <T> List<SerializableObject<T>> deserializeFromFile() {
 
@@ -66,6 +39,26 @@ public interface SerializableMethods {
 
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    static <T> void serializeToFileCorrect() {
+        List<SerializableObject<T>> sList = new ArrayList<>();
+        List<SerializableObject<T>> serializableObjects = SerializableMethods.deserializeFromFile();
+        for (SerializableObject<T> s : serializableObjects){
+            if (s.getChanged() instanceof User){
+                sList.add(s);
+            }
+        }
+        for (SerializableObject<T> s : sList){
+            serializableObjects.remove(s);
+        }
+        try(FileOutputStream fileOutputStream = new FileOutputStream(SERIALIZABLE_FILE_NAME);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)){
+            objectOutputStream.writeObject(serializableObjects);
+            System.out.println("Serialization successful!");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

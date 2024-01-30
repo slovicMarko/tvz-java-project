@@ -1,6 +1,7 @@
 package hr.production.slovic_projektni.utils;
 
 import hr.production.slovic_projektni.model.Comment;
+import hr.production.slovic_projektni.model.DateAndTime;
 import hr.production.slovic_projektni.model.User;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -72,13 +74,14 @@ public class DatabaseUtilComment {
 
     public static Long saveComment(Long authorId, String content, Long projectId) {
         try (Connection connection = DatabaseConnection.connectToDatabase()) {
-            String updateSqlQuery = "INSERT INTO COMMENT (AUTHOR_ID, CONTENT, PROJECT_ID) " +
-                    "VALUES(?, ?, ?)";
+            String updateSqlQuery = "INSERT INTO COMMENT (AUTHOR_ID, CONTENT, PROJECT_ID, POST_DATE) " +
+                    "VALUES(?, ?, ?, ?)";
 
             PreparedStatement pstmt = connection.prepareStatement(updateSqlQuery, Statement.RETURN_GENERATED_KEYS);
             pstmt.setLong(1, authorId);
             pstmt.setString(2, content);
             pstmt.setLong(3, projectId);
+            pstmt.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             pstmt.execute();
 
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
@@ -116,6 +119,7 @@ public class DatabaseUtilComment {
                 Long id = resultSet.getLong("ID");
                 User author = users.get(resultSet.getLong("AUTHOR_ID"));
                 String content = resultSet.getString("CONTENT");
+                LocalDateTime postDate = resultSet.getTimestamp("POST_DATE").toLocalDateTime();
                 String likes = resultSet.getString("LIKES");
 
                 List<Long> likesId = new ArrayList<>();
@@ -123,7 +127,7 @@ public class DatabaseUtilComment {
                     likesId.add(Long.parseLong(stringId));
                 }
 
-                comments.add(new Comment(id, author, content, likesId));
+                comments.add(new Comment(id, author, content, new DateAndTime(postDate),likesId));
             }
 
         } catch (SQLException | IOException ex) {

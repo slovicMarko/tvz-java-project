@@ -26,10 +26,10 @@ public class FileUtilUsers {
         try (PrintWriter pw = new PrintWriter(usersFile)) {
             for (User userNext : existingUsers) {
 
-                if (userNext.getUsername().equals(MainApplication.getActiveUser().getUsername())) {
-                    pw.println(userNext.getUsername() + ":" + User.hashPassword(newPassword));
+                if (userNext.getUsername().username().equals(MainApplication.getActiveUser().getUsername().username())) {
+                    pw.println(userNext.getUsername().username() + ":" + User.hashPassword(newPassword));
                 } else {
-                    pw.println(userNext.getUsername() + ":" + userNext.getPasswordHash());
+                    pw.println(userNext.getUsername().username() + ":" + userNext.getPasswordHash());
                 }
             }
         } catch (FileNotFoundException e) {
@@ -54,13 +54,13 @@ public class FileUtilUsers {
             logger.error(message);
             throw new ExistingUserException("User already exist.");
         } else {
-            existingUsers.add(new User(Long.parseLong("1"), username, password));
+            existingUsers.add(new User(Long.parseLong("1"), new Username(username), password));
         }
 
         try (PrintWriter pw = new PrintWriter(usersFile)) {
             for (User userNext : existingUsers) {
 
-                pw.println(userNext.getUsername() + ":" + userNext.getPasswordHash());
+                pw.println(userNext.getUsername().username() + ":" + userNext.getPasswordHash());
             }
         } catch (FileNotFoundException e) {
             String message = "Cannot store users in file: " + e.getMessage();
@@ -79,7 +79,7 @@ public class FileUtilUsers {
             while (Optional.of(line = reader.readLine()).isPresent()) {
                 userData = Arrays.asList(line.split(":"));
                 existingUsers.add(new User(Long.parseLong("1"),
-                        userData.get(0),
+                        new Username(userData.get(0)),
                         userData.get(1)));
             }
         } catch (IOException e) {
@@ -95,7 +95,7 @@ public class FileUtilUsers {
         List<User> users = getExistingUsers();
 
         for (User user : users) {
-            if (user.getUsername().equals(username))
+            if (user.getUsername().username().equals(username))
                 if (user.getPasswordHash().equals(hashPassword)) {
                     MainApplication.setActiveUser(DatabaseUtilUsers.activeUser(user));
                     return "Successful login in application!";

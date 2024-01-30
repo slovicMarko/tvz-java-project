@@ -19,7 +19,7 @@ public class UserToManageController implements CustomInitializable{
     public <T> void initialize(T userParam){
         if (userParam instanceof User){
             user = (User) userParam;
-            usernameLabel.setText(user.getUsername());
+            usernameLabel.setText(user.getUsername().username());
             fullnameLabel.setText(user.getFirstName() + " " + user.getLastName());
             userRoleChoiceBox.setValue(user.getUserRole());
             userRoleChoiceBox.setItems(FXCollections.observableArrayList(UserRole.values()));

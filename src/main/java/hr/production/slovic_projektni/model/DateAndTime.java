@@ -1,26 +1,20 @@
 package hr.production.slovic_projektni.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-public record Username(String username) implements Serializable {
-    @Override
-    public String username() {
-        return username;
-    }
-
+public record DateAndTime(LocalDateTime postDate) implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Username username1 = (Username) o;
-        return Objects.equals(username, username1.username);
+        DateAndTime that = (DateAndTime) o;
+        return Objects.equals(postDate, that.postDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username);
+        return Objects.hash(postDate);
     }
-
-
 }

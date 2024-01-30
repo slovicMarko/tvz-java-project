@@ -10,15 +10,21 @@ import java.util.Objects;
 
 public non-sealed class Comment extends NamedEntity implements LikedComment, Serializable, Cloneable {
 
-    private final User author;
+    private User author;
     private String content;
+    private DateAndTime postDate;
     List<Long> likes;
 
-    public Comment(Long id, User author, String content, List<Long> likes) {
+    public Comment(Long id, User author, String content, DateAndTime postDate, List<Long> likes) {
         super(id);
         this.author = author;
         this.content = content;
+        this.postDate = postDate;
         this.likes = likes;
+    }
+
+    public Comment() {
+        super(Long.parseLong("1"));
     }
 
     public User getAuthor() {
@@ -31,6 +37,10 @@ public non-sealed class Comment extends NamedEntity implements LikedComment, Ser
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public DateAndTime getPostDate() {
+        return postDate;
     }
 
     public List<Long> getLikes() {
@@ -58,20 +68,18 @@ public non-sealed class Comment extends NamedEntity implements LikedComment, Ser
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Comment comment = (Comment) o;
-        return Objects.equals(author, comment.author) && Objects.equals(content, comment.content) && Objects.equals(likes, comment.likes);
+        return Objects.equals(author, comment.author) && Objects.equals(content, comment.content) && Objects.equals(postDate, comment.postDate) && Objects.equals(likes, comment.likes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), author, content, likes);
+        return Objects.hash(super.hashCode(), author, content, postDate, likes);
     }
 
     @Override
     public Comment clone() {
         try {
-            Comment clone = (Comment) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
-            return clone;
+            return (Comment) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }

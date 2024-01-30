@@ -3,8 +3,11 @@ package hr.production.slovic_projektni.controllers;
 import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.FxmlLoadException;
 import hr.production.slovic_projektni.model.Comment;
+import hr.production.slovic_projektni.model.DateAndTime;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.User;
+import hr.production.slovic_projektni.serialization.SerializableMethods;
+import hr.production.slovic_projektni.serialization.SerializableObject;
 import hr.production.slovic_projektni.sort.CommentSorter;
 import hr.production.slovic_projektni.utils.DatabaseUtilComment;
 import hr.production.slovic_projektni.utils.DatabaseUtilProject;
@@ -23,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -108,9 +112,15 @@ public class ProjectViewController implements CustomInitializable {
                 projectId);
 
         if (commentId != null){
+            Comment newComment = new Comment(commentId ,MainApplication.getActiveUser(),
+                    commentTextArea.getText(), new DateAndTime(LocalDateTime.now()),new ArrayList<>());
 
-            commentList.add(new Comment(commentId ,MainApplication.getActiveUser(),
-                    commentTextArea.getText(), new ArrayList<>()));
+            SerializableObject<Comment> commentSerializableObject = new SerializableObject.Builder<>(new Comment())
+                    .withChangedClass(newComment).build();
+
+            SerializableMethods.serializeToFile(commentSerializableObject);
+
+            commentList.add(newComment);
             showComments();
         }
     }

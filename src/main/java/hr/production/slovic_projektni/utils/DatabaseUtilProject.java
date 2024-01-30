@@ -1,6 +1,7 @@
 package hr.production.slovic_projektni.utils;
 
 import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.model.DateAndTime;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.Subject;
 import hr.production.slovic_projektni.model.User;
@@ -56,18 +57,18 @@ public class DatabaseUtilProject {
         }
     }
 
-    public static void saveProject(String projectName, String projectDescription, Subject subject) {
+    public static void saveProject(Project newProject) {
         try (Connection connection = DatabaseConnection.connectToDatabase()) {
 
             String insertProjectSql = "INSERT INTO PROJECT (NAME, DESCRIPTION, AUTHOR_ID, SUBJECT, START_DATE)\n" +
                     "VALUES (?, ?, ?, ?, ?);\n";
 
             PreparedStatement pstmt = connection.prepareStatement(insertProjectSql);
-            pstmt.setString(1, projectName);
-            pstmt.setString(2, projectDescription);
-            pstmt.setLong(3, MainApplication.getActiveUser().getId());
-            pstmt.setString(4, subject.toString());
-            pstmt.setDate(5, Date.valueOf(LocalDate.now()));
+            pstmt.setString(1, newProject.getName());
+            pstmt.setString(2, newProject.getDescription());
+            pstmt.setLong(3, newProject.getAuthor().getId());
+            pstmt.setString(4, newProject.getSubject().toString());
+            pstmt.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             pstmt.execute();
 
         } catch (SQLException | IOException ex) {
@@ -109,9 +110,9 @@ public class DatabaseUtilProject {
             String name = resultSet.getString("NAME");
             String description = resultSet.getString("DESCRIPTION");
             Subject subject = Subject.valueOf(resultSet.getString("SUBJECT"));
-            LocalDate startDate = resultSet.getDate("START_DATE").toLocalDate();
+            LocalDateTime postDate = resultSet.getTimestamp("START_DATE").toLocalDateTime();
 
-            projects.add(new Project(id, name, description, startDate, user, subject, DatabaseUtilComment.getComments(id, users)));
+            projects.add(new Project(id, name, description, new DateAndTime(postDate), user, subject, DatabaseUtilComment.getComments(id, users)));
         }
     }
 }

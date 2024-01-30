@@ -5,6 +5,8 @@ import hr.production.slovic_projektni.exception.ExistingUserException;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.model.UserRole;
 import hr.production.slovic_projektni.model.Username;
+import hr.production.slovic_projektni.serialization.SerializableMethods;
+import hr.production.slovic_projektni.serialization.SerializableObject;
 import hr.production.slovic_projektni.utils.DatabaseUtilUsers;
 import hr.production.slovic_projektni.utils.FileUtilUsers;
 import javafx.fxml.FXML;
@@ -46,7 +48,8 @@ public class RegisterScreenController {
     public static void registerButtonClicked(){
 
         try{
-            User newUser = new User(Long.parseLong("1"), firstNameString, lastNameString, usernameString, User.hashPassword(passwordString), UserRole.STUDENT);
+            User newUser = new User(Long.parseLong("1"), firstNameString, lastNameString, new Username(usernameString), User.hashPassword(passwordString), UserRole.STUDENT);
+
             FileUtilUsers.createUserInFile(usernameString, User.hashPassword(passwordString));
             DatabaseUtilUsers.saveUser(newUser);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -54,6 +57,11 @@ public class RegisterScreenController {
             alert.setContentText("Uspješno ste se registrirali u aplikaciju.");
             alert.showAndWait();
             MainApplication.setActiveUser(DatabaseUtilUsers.activeUser(newUser));
+
+            SerializableObject<User> userSerializableObject = new SerializableObject.Builder<>(new User())
+                    .withChangedClass(newUser).build();
+            SerializableMethods.serializeToFile(userSerializableObject);
+
             NavigationMethods.goToProjectSearchPage();
         } catch (ExistingUserException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
