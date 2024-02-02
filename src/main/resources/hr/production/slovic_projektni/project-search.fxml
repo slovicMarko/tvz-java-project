@@ -34,7 +34,7 @@
                      <Insets left="54.0" top="14.0" />
                   </VBox.margin>
                </Label>
-               <TextField maxWidth="200.0" prefWidth="200.0">
+               <TextField fx:id="projectSearchTextField" maxWidth="200.0" prefWidth="200.0">
                   <VBox.margin>
                      <Insets left="54.0" />
                   </VBox.margin>

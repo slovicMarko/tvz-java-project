@@ -44,7 +44,7 @@
                            <Insets />
                         </VBox.margin>
                      </Label>
-                     <TextField fx:id="firstNameField">
+                     <TextField fx:id="firstNameField" disable="true">
                         <VBox.margin>
                            <Insets right="5.0" />
                         </VBox.margin>
@@ -58,7 +58,7 @@
                            <Insets left="5.0" />
                         </VBox.margin>
                      </Label>
-                     <TextField fx:id="lastNameField" alignment="BASELINE_LEFT">
+                     <TextField fx:id="lastNameField" alignment="BASELINE_LEFT" disable="true">
                         <VBox.margin>
                            <Insets left="5.0" />
                         </VBox.margin>

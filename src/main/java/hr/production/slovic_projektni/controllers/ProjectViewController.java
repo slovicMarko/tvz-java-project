@@ -1,24 +1,22 @@
 package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
-import hr.production.slovic_projektni.exception.FxmlLoadException;
 import hr.production.slovic_projektni.model.Comment;
 import hr.production.slovic_projektni.model.DateAndTime;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.User;
-import hr.production.slovic_projektni.serialization.SerializableMethods;
 import hr.production.slovic_projektni.serialization.SerializableObject;
 import hr.production.slovic_projektni.sort.CommentSorter;
+import hr.production.slovic_projektni.threads.GetCommentsThread;
+import hr.production.slovic_projektni.threads.SetSerializableDataThread;
 import hr.production.slovic_projektni.utils.DatabaseUtilComment;
 import hr.production.slovic_projektni.utils.DatabaseUtilProject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
 import org.slf4j.Logger;
@@ -29,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
 public class ProjectViewController implements CustomInitializable {
@@ -50,6 +49,9 @@ public class ProjectViewController implements CustomInitializable {
     List<Comment> commentList;
     private static Long projectId;
     private static Project projectCopy;
+    private GetCommentsThread getCommentsThread;
+    private static ScheduledExecutorService executorService;
+
 
     public <T> void initialize(T project) {
         editButton.setVisible(false);
@@ -57,7 +59,33 @@ public class ProjectViewController implements CustomInitializable {
         if (project instanceof Project){
             projectCopy = (Project) project;
             projectId = projectCopy.getId();
+
             commentList = projectCopy.getComments();
+
+
+//            executorService = Executors.newSingleThreadScheduledExecutor();
+//
+//            executorService.scheduleAtFixedRate(() -> {
+//                if (!MainApplication.getFxmlName().equals("project-view.fxml")){
+//                    executorService.shutdownNow();
+//                } else {
+//                    getCommentsThread = new GetCommentsThread(projectId);
+//                    Thread thread = new Thread(getCommentsThread);
+//                    thread.start();
+//
+//                    try {
+//                        thread.join();
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    Platform.runLater(() -> {
+//                        commentList = getCommentsThread.getCommentList();
+//                    });
+//                }
+//            }, 3, 3, TimeUnit.SECONDS);
+
+            showComments();
+
             titleLabel.setText(projectCopy.getName());
             descriptionLabel.setText(projectCopy.getDescription());
             authorLabel.setText(projectCopy.getAuthor().getFirstName() + " " + projectCopy.getAuthor().getLastName());
@@ -74,14 +102,13 @@ public class ProjectViewController implements CustomInitializable {
                 deleteButton.setVisible(true);
             }
         }
-
-        showComments();
     }
+
 
     private void showComments() {
         commentList = commentList.stream().sorted(new CommentSorter()).collect(Collectors.toList());
 
-        CardMethodGeneric.showCardsOnGridPane("comment.fxml", commentList, commentsGrid);
+        CardMethodGeneric.showCardsInContainer("comment.fxml", commentList, commentsGrid);
     }
 
     public void backButton() {
@@ -118,7 +145,8 @@ public class ProjectViewController implements CustomInitializable {
             SerializableObject<Comment> commentSerializableObject = new SerializableObject.Builder<>(new Comment())
                     .withChangedClass(newComment).build();
 
-            SerializableMethods.serializeToFile(commentSerializableObject);
+            SetSerializableDataThread<Comment> setSerializableDataThread = new SetSerializableDataThread<>(commentSerializableObject);
+            setSerializableDataThread.run();
 
             commentList.add(newComment);
             showComments();

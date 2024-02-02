@@ -1,11 +1,13 @@
 package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.model.DateAndTime;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.Subject;
 import hr.production.slovic_projektni.serialization.SerializableMethods;
 import hr.production.slovic_projektni.serialization.SerializableObject;
+import hr.production.slovic_projektni.threads.SetSerializableDataThread;
 import hr.production.slovic_projektni.utils.DatabaseUtilProject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -52,10 +54,8 @@ public class NewProjectController implements CustomInitializable {
 
         try{
             if (Optional.of(projectInProgress).isPresent()){
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation Dialog");
-                alert.setHeaderText(null);
-                alert.setContentText("Are you sure you want to make changes?");
+                Alert alert = Constants.confirmAlert(null, "Are you sure you want to make new project?");
+                alert.setContentText("Are you sure you want to make new project?");
                 alert.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.OK){
 
@@ -67,6 +67,9 @@ public class NewProjectController implements CustomInitializable {
                         SerializableObject<Project> projectSerializableObject = new SerializableObject.Builder<>(oldVersion)
                                 .withChangedClass(projectInProgress).build();
 
+                        SetSerializableDataThread<Project> setSerializableDataThread = new SetSerializableDataThread<>(projectSerializableObject);
+                        setSerializableDataThread.run();
+
                         SerializableMethods.serializeToFile(projectSerializableObject);
                         DatabaseUtilProject.updateProject(projectInProgress);
                         NavigationMethods.goToProjectSearchPage();
@@ -74,23 +77,35 @@ public class NewProjectController implements CustomInitializable {
                 });
             }
         } catch (NullPointerException e){
-            Project newProject = new Project(Long.parseLong("0"),
-                    projectNameTextField.getText(),
-                    projectDescriptionTextArea.getText(),
-                    new DateAndTime(LocalDateTime.now()),
-                    MainApplication.getActiveUser(),
-                    selectedSubject,
-                    new ArrayList<>());
 
-            SerializableObject<Project> projectSerializableObject = new SerializableObject.Builder<>(new Project())
-                    .withChangedClass(newProject).build();
+            if (projectNameTextField.getText().isEmpty() ||
+                    projectDescriptionTextArea.getText().isEmpty() ||
+                    subjectChoiceBox.getValue() == null){
+                Constants.errorAlert("Invalid input", "There are some empty input fields.");
+            } else {
+                Alert alert = Constants.confirmAlert(null, "Are you sure you want to make new project?");
+                alert.setContentText("Are you sure you want to make new project?");
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK){
+                        Project newProject = new Project(Long.parseLong("0"),
+                                projectNameTextField.getText(),
+                                projectDescriptionTextArea.getText(),
+                                new DateAndTime(LocalDateTime.now()),
+                                MainApplication.getActiveUser(),
+                                selectedSubject,
+                                new ArrayList<>());
 
-            SerializableMethods.serializeToFile(projectSerializableObject);
-            DatabaseUtilProject.saveProject(newProject);
-            NavigationMethods.goToProjectSearchPage();
+                        SerializableObject<Project> projectSerializableObject = new SerializableObject.Builder<>(new Project())
+                                .withChangedClass(newProject).build();
+
+                        SetSerializableDataThread<Project> setSerializableDataThread = new SetSerializableDataThread<>(projectSerializableObject);
+                        setSerializableDataThread.run();
+
+                        DatabaseUtilProject.saveProject(newProject);
+                        NavigationMethods.goToProjectSearchPage();
+                    }
+                });
+            }
         }
-
-
     }
-
 }

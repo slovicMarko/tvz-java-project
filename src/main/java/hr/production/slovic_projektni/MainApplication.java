@@ -7,12 +7,22 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class MainApplication extends Application {
 
     public static Stage mainStage;
 
     public static User activeUser;
+    public static String fxmlFileName;
+
+    public static String getFxmlName(){
+        return fxmlFileName;
+    };
+    public static void setFxmlName(String name){
+        fxmlFileName = name;
+    };
 
     public static User getActiveUser() {
         return activeUser;

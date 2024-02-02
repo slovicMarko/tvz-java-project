@@ -1,12 +1,15 @@
 package hr.production.slovic_projektni.controllers;
 
+import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.ClickedOnInvalidContentException;
 import hr.production.slovic_projektni.model.Comment;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.User;
-import hr.production.slovic_projektni.serialization.SerializableMethods;
 import hr.production.slovic_projektni.serialization.SerializableObject;
+import hr.production.slovic_projektni.threads.FindLastSerializableChangeThread;
+import hr.production.slovic_projektni.threads.GetSerializableDataThread;
 import hr.production.slovic_projektni.utils.DatabaseUtilUsers;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,9 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ChangesController<T> {
 
@@ -35,11 +41,41 @@ public class ChangesController<T> {
      @FXML TextArea originalSerializedTextArea;
      @FXML TextArea changedSerializedTextArea;
 
+     private GetSerializableDataThread<T> getSerializableDataThread;
+     private static ScheduledExecutorService executorService;
+     private List<SerializableObject<T>> serializableObjectList = new ArrayList<>();
+
 
      public void initialize(){
-          List<SerializableObject<T>> serializableObjects = SerializableMethods.deserializeFromFile();
 
-          serializedObjectTableView.setItems(FXCollections.observableArrayList((Collection<? extends SerializableObject<T>>) serializableObjects));
+          FindLastSerializableChangeThread<T> findLastSerializableChangeThread = new FindLastSerializableChangeThread<T>();
+          findLastSerializableChangeThread.run();
+
+          Platform.runLater(() -> {
+               SerializableObject<T> selectedObject = findLastSerializableChangeThread.getLastData();
+
+               displayLastChangeInTextArea(selectedObject);
+          });
+
+
+          executorService = Executors.newSingleThreadScheduledExecutor();
+          executorService.scheduleAtFixedRate(() -> {
+               Platform.runLater(() -> {
+                    if (!MainApplication.getFxmlName().equals("changes.fxml")){
+                         executorService.shutdownNow();
+                    } else{
+                         getSerializableDataThread = new GetSerializableDataThread<>();
+                         getSerializableDataThread.run();
+
+                         List<SerializableObject<T>> updatedObjects = getSerializableDataThread.getSerializedList();
+
+                         if (!serializableObjectList.equals(updatedObjects)){
+                              serializableObjectList = updatedObjects;
+                              serializedObjectTableView.setItems(FXCollections.observableArrayList(updatedObjects));
+                         }
+                    }
+               });
+          }, 0, 10, TimeUnit.SECONDS);
 
           initializeTableColumns();
 
@@ -54,26 +90,28 @@ public class ChangesController<T> {
                }
 
           });
+     }
 
+     private void displayLastChangeInTextArea(SerializableObject<T> selectedObject) {
+          if (selectedObject.getOriginal() instanceof User){
+               originalSerializedTextArea.setText(selectedUser((User) selectedObject.getOriginal()));
+               changedSerializedTextArea.setText(selectedUser((User) selectedObject.getChanged()));
+
+          } else if (selectedObject.getOriginal() instanceof Comment){
+               originalSerializedTextArea.setText(selectedComment((Comment) selectedObject.getOriginal()));
+               changedSerializedTextArea.setText(selectedComment((Comment) selectedObject.getChanged()));
+
+          } else if (selectedObject.getOriginal() instanceof Project){
+               originalSerializedTextArea.setText(selectedProject((Project) selectedObject.getOriginal()));
+               changedSerializedTextArea.setText(selectedProject((Project) selectedObject.getChanged()));
+          }
      }
 
      private void selectingClickedChange() {
 
           SerializableObject<T> selectedObject = serializedObjectTableView.getSelectionModel().getSelectedItem();
           if (selectedObject != null){
-               if (selectedObject.getOriginal() instanceof User){
-                    originalSerializedTextArea.setText(selectedUser((User) selectedObject.getOriginal()));
-                    changedSerializedTextArea.setText(selectedUser((User) selectedObject.getChanged()));
-
-               } else if (selectedObject.getOriginal() instanceof Comment){
-                    originalSerializedTextArea.setText(selectedComment((Comment) selectedObject.getOriginal()));
-                    changedSerializedTextArea.setText(selectedComment((Comment) selectedObject.getChanged()));
-
-               } else if (selectedObject.getOriginal() instanceof Project){
-                    originalSerializedTextArea.setText(selectedProject((Project) selectedObject.getOriginal()));
-                    changedSerializedTextArea.setText(selectedProject((Project) selectedObject.getChanged()));
-               }
-
+               displayLastChangeInTextArea(selectedObject);
           } else {
                throw new ClickedOnInvalidContentException("Clicked outside of the projects table.");
           }
@@ -91,8 +129,8 @@ public class ChangesController<T> {
                   "\n\nUsername: " + user.getUsername().username() +
                   "\n\nRole: " + user.getUserRole().getName() +
                   "\n\nHashed password: " + user.getPasswordHash();
-
      }
+
      private String selectedComment(Comment comment){
           if (comment.getContent() == null){
                return "Author: " +
@@ -177,9 +215,8 @@ public class ChangesController<T> {
           if (users.getOriginal().getFirstName() == null){
                return "New User";
           }
-          if (!(users.getOriginal().getFirstName()+users.getOriginal().getLastName())
-                  .equals((users.getChanged().getFirstName()+users.getChanged().getLastName()))){
-               return  "Name";
+          if (users.getChanged().getFirstName() == null){
+               return "User deleted";
           }
           if (!(users.getOriginal().getUserRole())
                   .equals((users.getChanged().getUserRole()))){
@@ -196,6 +233,9 @@ public class ChangesController<T> {
           if (comments.getOriginal().getContent() == null){
                return "New Comment";
           }
+          if (comments.getChanged().getContent() == null){
+               return "Comment deleted";
+          }
           if (!comments.getOriginal().getContent()
                   .equals(comments.getChanged().getContent())){
                return "Content";
@@ -210,6 +250,9 @@ public class ChangesController<T> {
      public String findAttributesProject(SerializableObject<Project> projects){
           if (projects.getOriginal().getName().isEmpty()){
                return "New Project";
+          }
+          if (projects.getChanged().getName().isEmpty()){
+               return "Project deleted";
           }
           String string = "";
           if (!projects.getOriginal().getSubject()

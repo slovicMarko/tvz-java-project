@@ -5,6 +5,7 @@ import hr.production.slovic_projektni.model.User;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class SerializableObject<T> implements Serializable {
 
@@ -71,13 +72,16 @@ public class SerializableObject<T> implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SerializableObject<?> that = (SerializableObject<?>) o;
+        return Objects.equals(original, that.original) && Objects.equals(changed, that.changed) && Objects.equals(madeChange, that.madeChange) && Objects.equals(changeTime, that.changeTime);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public int hashCode() {
+        return Objects.hash(original, changed, madeChange, changeTime);
     }
 
     @Override

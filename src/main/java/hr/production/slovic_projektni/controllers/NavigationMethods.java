@@ -2,6 +2,7 @@ package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.FxmlLoadException;
+import hr.production.slovic_projektni.main.Main;
 import hr.production.slovic_projektni.model.Project;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,6 +20,8 @@ public interface NavigationMethods {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(screenName));
         try{
             Scene scene = new Scene(fxmlLoader.load(), screenName.equals("project-search.fxml") ? 1054 : 800, 600);
+
+            MainApplication.setFxmlName(screenName);
             MainApplication.getMainStage().setScene(scene);
             MainApplication.getMainStage().show();
         } catch (IOException e) {
@@ -37,7 +40,7 @@ public interface NavigationMethods {
             if (controllerInstance instanceof CustomInitializable) {
                 ((CustomInitializable) controllerInstance).initialize(param);
             }
-
+            MainApplication.setFxmlName(screenName);
             MainApplication.getMainStage().setScene(scene);
             MainApplication.getMainStage().show();
         } catch (IOException e) {
@@ -46,6 +49,8 @@ public interface NavigationMethods {
             throw new FxmlLoadException(e);
         }
     }
+
+
 
 
     static void showProjectView(Project project){

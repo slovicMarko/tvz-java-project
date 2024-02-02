@@ -97,29 +97,6 @@ public class DatabaseUtilUsers {
     }
 
 
-/*
-    public static Long nextUserId(){
-        Long maxId = Long.parseLong("999");
-        try(Connection connection = DatabaseConnection.connectToDatabase()) {
-            String sqlQuery = "SELECT ID\n" +
-                    "FROM USERS  \n" +
-                    "WHERE ID = (SELECT MAX(ID) FROM USERS);";
-            Statement stmt = connection.createStatement();
-            stmt.execute(sqlQuery);
-            ResultSet resultSet = stmt.getResultSet();
-
-            resultSet.next();
-            maxId = resultSet.getLong("ID");
-
-        } catch (SQLException | IOException ex) {
-            String message = "Problem with catching next ID.";
-            logger.error(message);
-        }
-        return maxId+1;
-    }
-
- */
-
     public static User activeUser(User user) {
         Long id;
         String firstName, lastName;

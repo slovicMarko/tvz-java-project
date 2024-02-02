@@ -37,7 +37,7 @@
                        </columnConstraints>
                        <rowConstraints>
                          <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-                         <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="67.0" vgrow="SOMETIMES" />
+                         <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="67.0" vgrow="ALWAYS" />
                          <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="43.0" vgrow="SOMETIMES" />
                        </rowConstraints>
                         <children>
@@ -46,7 +46,7 @@
                                  <Font name="System Bold" size="16.0" />
                               </font>
                            </Label>
-                           <Label fx:id="descriptionLabel" prefHeight="88.0" prefWidth="398.0" text="Description" wrapText="true" GridPane.rowIndex="1" />
+                           <Label fx:id="descriptionLabel" prefWidth="398.0" text="Description" wrapText="true" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
                            <Label fx:id="authorLabel" text="Author" GridPane.rowIndex="2" />
                            <VBox maxWidth="80.0" prefHeight="59.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowSpan="2">
                               <children>

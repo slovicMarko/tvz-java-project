@@ -46,6 +46,11 @@
              <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
            </rowConstraints>
             <children>
+               <Button fx:id="loginBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showLoginView" text="Login" GridPane.halignment="RIGHT">
+                  <GridPane.margin>
+                     <Insets bottom="5.0" right="5.0" />
+                  </GridPane.margin>
+               </Button>
                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showRegisterView" prefWidth="100.0" text="Register" GridPane.columnIndex="1">
                   <GridPane.margin>
                      <Insets bottom="5.0" left="5.0" />
@@ -54,11 +59,6 @@
                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProjectSearchPage" prefHeight="26.0" prefWidth="210.0" text="Continue as guest" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
                   <GridPane.margin>
                      <Insets />
-                  </GridPane.margin>
-               </Button>
-               <Button fx:id="loginBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showLoginView" text="Login" GridPane.halignment="RIGHT">
-                  <GridPane.margin>
-                     <Insets bottom="5.0" right="5.0" />
                   </GridPane.margin>
                </Button>
             </children>

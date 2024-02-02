@@ -8,14 +8,13 @@ import java.util.Properties;
 
 public class DatabaseConnection {
 
-    private static final String DATABASE_FILE = "db/database.properties";
-    private static final String DATABASE_FILE2 = "conf/database.properties";
+    private static final String DATABASE_FILE = "conf/database.properties";
 
 
     public static Connection connectToDatabase() throws SQLException, IOException {
 
         Properties svojstva = new Properties();
-        svojstva.load(new FileReader(DATABASE_FILE2));
+        svojstva.load(new FileReader(DATABASE_FILE));
         String databaseUrl = svojstva.getProperty("databaseUrl");
         String username = svojstva.getProperty("username");
         String password = svojstva.getProperty("password");

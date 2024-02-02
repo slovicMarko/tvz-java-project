@@ -16,7 +16,7 @@ public interface CardMethodGeneric {
 
     Logger logger = LoggerFactory.getLogger(CardMethodGeneric.class);
 
-    static <T, A, E> void showCardsOnGridPane(String cardName, List<T> listOfElements, E container) {
+    static <T, A, E> void showCardsInContainer(String cardName, List<T> listOfElements, E container) {
         int column = 0;
         int row = 1;
 
@@ -29,9 +29,11 @@ public interface CardMethodGeneric {
                 if (controllerInstance instanceof CustomInitializable) {
                     ((CustomInitializable) controllerInstance).initialize(element);
                 }
+                if (container instanceof GridPane){
+                    ((GridPane) container).add(commentCard, column, row++);
+                    GridPane.setMargin(commentCard, new Insets(10));
+                }
 
-                ((GridPane) container).add(commentCard, column, row++);
-                GridPane.setMargin(commentCard, new Insets(10));
             }
         } catch (IOException e) {
             String message = "Error while adding cards: " + e.getMessage();

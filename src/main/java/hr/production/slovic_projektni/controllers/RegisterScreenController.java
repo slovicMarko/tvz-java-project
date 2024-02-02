@@ -5,8 +5,8 @@ import hr.production.slovic_projektni.exception.ExistingUserException;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.model.UserRole;
 import hr.production.slovic_projektni.model.Username;
-import hr.production.slovic_projektni.serialization.SerializableMethods;
 import hr.production.slovic_projektni.serialization.SerializableObject;
+import hr.production.slovic_projektni.threads.SetSerializableDataThread;
 import hr.production.slovic_projektni.utils.DatabaseUtilUsers;
 import hr.production.slovic_projektni.utils.FileUtilUsers;
 import javafx.fxml.FXML;
@@ -60,7 +60,9 @@ public class RegisterScreenController {
 
             SerializableObject<User> userSerializableObject = new SerializableObject.Builder<>(new User())
                     .withChangedClass(newUser).build();
-            SerializableMethods.serializeToFile(userSerializableObject);
+
+            SetSerializableDataThread<User> setSerializableDataThread = new SetSerializableDataThread<>(userSerializableObject);
+            setSerializableDataThread.run();
 
             NavigationMethods.goToProjectSearchPage();
         } catch (ExistingUserException e) {

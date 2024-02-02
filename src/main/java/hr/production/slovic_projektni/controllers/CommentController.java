@@ -1,25 +1,20 @@
 package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
-import hr.production.slovic_projektni.main.Main;
 import hr.production.slovic_projektni.model.Comment;
-import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.serialization.SerializableMethods;
 import hr.production.slovic_projektni.serialization.SerializableObject;
+import hr.production.slovic_projektni.threads.SetSerializableDataThread;
 import hr.production.slovic_projektni.utils.DatabaseUtilComment;
-import javafx.beans.Observable;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
-public class CommentController<T> implements CustomInitializable{
+public class CommentController implements CustomInitializable{
 
     @FXML private Label commentAuthor;
     @FXML private Label numberOfLikes;
@@ -65,7 +60,6 @@ public class CommentController<T> implements CustomInitializable{
         }
     }
 
-
     public void editButtonClicked(){
         saveCommentButton.setVisible(true);
         textArea.setEditable(true);
@@ -80,7 +74,10 @@ public class CommentController<T> implements CustomInitializable{
 
         if (!baseComment.equals(commentSerializableObject.getOriginal())){
             commentSerializableObject.setChanged(baseComment);
-            SerializableMethods.serializeToFile(commentSerializableObject);
+
+            SetSerializableDataThread<Comment> setSerializableDataThread = new SetSerializableDataThread<>(commentSerializableObject);
+            setSerializableDataThread.run();
+
             DatabaseUtilComment.updateCommentContent(baseComment);
         }
 
@@ -101,11 +98,15 @@ public class CommentController<T> implements CustomInitializable{
         } else {
             baseComment.submitLike();
         }
+
         commentSerializableObject.setChanged(baseComment);
 
         if (!baseComment.equals(oldComment)){
             commentSerializableObject.setChanged(baseComment);
-            SerializableMethods.serializeToFile(commentSerializableObject);
+
+            SetSerializableDataThread<Comment> setSerializableDataThread = new SetSerializableDataThread<>(commentSerializableObject);
+            setSerializableDataThread.run();
+
             DatabaseUtilComment.updateCommentLikes(baseComment);
         }
 
