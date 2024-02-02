@@ -29,8 +29,9 @@ public class UserToManageController implements CustomInitializable{
             });
 
             userCheckBox.setOnAction(event -> {
-                if (userCheckBox.isSelected())
+                if (userCheckBox.isSelected()){
                     ManageUsersController.selectedUserList.add(user);
+                }
                 else
                     ManageUsersController.selectedUserList.remove(user);
             });

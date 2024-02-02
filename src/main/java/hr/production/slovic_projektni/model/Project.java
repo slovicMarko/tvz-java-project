@@ -1,5 +1,9 @@
 package hr.production.slovic_projektni.model;
 
+import hr.production.slovic_projektni.constants.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,6 +11,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Project extends NamedEntity implements Serializable, Cloneable {
+
+    public static final Logger logger = LoggerFactory.getLogger(Project.class);
     private String description;
     private DateAndTime postDate;
     private User author;
@@ -70,6 +76,9 @@ public class Project extends NamedEntity implements Serializable, Cloneable {
         try {
             return (Project) super.clone();
         } catch (CloneNotSupportedException e) {
+            String message = "Error while cloning project for serialization";
+            logger.error(message);
+            Constants.errorAlert("Cloning error", message);
             throw new AssertionError();
         }
     }

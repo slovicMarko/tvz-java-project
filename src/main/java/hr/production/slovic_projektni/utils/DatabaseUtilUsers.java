@@ -1,5 +1,6 @@
 package hr.production.slovic_projektni.utils;
 
+import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.controllers.NavigationMethods;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.model.UserRole;
@@ -18,6 +19,20 @@ public class DatabaseUtilUsers {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseUtilUsers.class);
 
+    public static void deleteUser(Long userId){
+        try (Connection connection = DatabaseConnection.connectToDatabase()) {
+            String deleteUserSql = "DELETE FROM USERS WHERE ID = ?";
+            PreparedStatement pstmt = connection.prepareStatement(deleteUserSql);
+            pstmt.setLong(1, userId);
+            pstmt.execute();
+        } catch (SQLException | IOException ex) {
+            String message = "Problem with deleting user from Database.";
+            Constants.errorAlert("Problem with deleting", message);
+            logger.error(message);
+        }
+    }
+
+
     public static void changeUserPassword(Long id, String newPassword) {
         try (Connection connection = DatabaseConnection.connectToDatabase()) {
             String updatePasswordSql = "UPDATE USERS " +
@@ -29,18 +44,11 @@ public class DatabaseUtilUsers {
             pstmt.setLong(2, id);
             pstmt.executeUpdate();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Password changed!");
-            alert.setContentText("New password is successful stored.");
-            alert.showAndWait();
+            Constants.infoAlert("Password changed!", "New password is successfully stored.");
 
         } catch (SQLException | IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Password not changed!");
-            alert.setContentText("Problem with saving new Password");
-            alert.showAndWait();
-
             String message = "Problem with changing User password.";
+            Constants.errorAlert("Password not changed!", message);
             logger.error(message);
         }
     }
@@ -58,20 +66,11 @@ public class DatabaseUtilUsers {
                 pstmt.setLong(2, user.getId());
                 pstmt.executeUpdate();
             }
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("User roles changed!");
-            alert.setContentText("Manage users changes successfully stored.");
-            alert.showAndWait();
-
+            Constants.infoAlert("User roles changed!","Users roles have been successfully stored.");
 
         } catch (SQLException | IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Problem with saving changes");
-            alert.setContentText("Manage users changes aren't stored.");
-            alert.showAndWait();
-
-            String message = "Manage users changes aren't changed.";
+            String message = "New user roles are not stored.";
+            Constants.errorAlert("Problem with saving changes", message);
             logger.error(message);
         }
     }
@@ -92,6 +91,7 @@ public class DatabaseUtilUsers {
 
         } catch (SQLException | IOException ex) {
             String message = "Problem with saving new user.";
+            Constants.errorAlert("Problem with saving", message);
             logger.error(message);
         }
     }
@@ -118,7 +118,8 @@ public class DatabaseUtilUsers {
             lastName = resultSet.getString("LAST_NAME");
 
         } catch (SQLException | IOException ex) {
-            String message = "Problem with catching active user.";
+            String message = "Problem with getting active user.";
+            Constants.errorAlert("Active user", message);
             logger.error(message);
             throw new RuntimeException(ex);
         }
@@ -138,7 +139,8 @@ public class DatabaseUtilUsers {
             mapResultSetToUsersList(resultSet, users);
 
         } catch (SQLException | IOException ex) {
-            String message = "Cannot fetch data for Users .";
+            String message = "Cannot get data for users.";
+            Constants.errorAlert("Getting users", message);
             logger.error(message);
         }
         return users;
@@ -171,7 +173,8 @@ public class DatabaseUtilUsers {
             mapResultSetToUsersMap(resultSet, users);
 
         } catch (SQLException | IOException ex) {
-            String message = "Cannot fetch data for Users .";
+            String message = "Cannot get data for users.";
+            Constants.errorAlert("Getting users", message);
             logger.error(message);
         }
 

@@ -14,7 +14,6 @@ public class GetSerializableDataThread<T> extends SerializableThread implements 
     public void run() {
         CompletableFuture.runAsync(() -> {
             this.serializableObjects = super.getSerializableObjects();
-            System.out.println("Nit se izvodi. Serializable");
         }).join();
     }
 

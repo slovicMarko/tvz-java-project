@@ -59,16 +59,8 @@ public class SerializableObject<T> implements Serializable {
         return madeChange;
     }
 
-    public void setMadeChange(User madeChange) {
-        this.madeChange = madeChange;
-    }
-
     public LocalDateTime getChangeTime() {
         return changeTime;
-    }
-
-    public void setChangeTime(LocalDateTime changeTime) {
-        this.changeTime = changeTime;
     }
 
     @Override

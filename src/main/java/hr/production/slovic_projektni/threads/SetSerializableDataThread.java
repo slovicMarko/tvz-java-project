@@ -17,7 +17,6 @@ public class SetSerializableDataThread<T> extends SerializableThread implements 
     public void run() {
         CompletableFuture.runAsync(() -> {
             super.saveToSerializableFile(serializableObject);
-            System.out.println("Saved to serializable file!");
         }).join();
     }
 

@@ -1,7 +1,8 @@
 package hr.production.slovic_projektni.utils;
 
-import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.exception.ExistingUserException;
+import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.model.Username;
 import org.slf4j.Logger;
@@ -19,6 +20,34 @@ public class FileUtilUsers {
 
     private static final String USERS_FILE_NAME = "data/users.txt";
 
+    public static void deleteUserFromFile(String username){
+        File usersFile = new File(USERS_FILE_NAME);
+        List<User> existingUsers = getExistingUsers();
+        User userToDelete = null;
+
+        for (User user : existingUsers){
+            if (user.getUsername().username().equals(username)){
+                userToDelete = user;
+            }
+        }
+        if (userToDelete != null){
+            existingUsers.remove(userToDelete);
+        }
+
+        try (PrintWriter pw = new PrintWriter(usersFile)) {
+            for (User userNext : existingUsers) {
+
+                pw.println(userNext.getUsername().username() + ":" + userNext.getPasswordHash());
+            }
+        } catch (FileNotFoundException e) {
+            String message = "Cannot create users in file: " + e.getMessage();
+            Constants.errorAlert("Create user", message);
+            logger.error(message);
+        }
+
+    }
+
+
     public static void changeUserPassword(String newPassword) {
         File usersFile = new File(USERS_FILE_NAME);
 
@@ -34,11 +63,9 @@ public class FileUtilUsers {
             }
         } catch (FileNotFoundException e) {
             String message = "Password isn't changed because: " + e.getMessage();
+            Constants.errorAlert("Password change", message);
             logger.error(message);
-            throw new RuntimeException(e);
         }
-
-
     }
 
 
@@ -47,7 +74,7 @@ public class FileUtilUsers {
         List<User> existingUsers = getExistingUsers();
 
         Boolean usernameExist = existingUsers.stream()
-                .anyMatch(u -> u.getUsername().equals(username));
+                .anyMatch(u -> u.getUsername().username().equals(username));
 
         if (usernameExist) {
             String message = "Username already taken: " + username;
@@ -63,9 +90,9 @@ public class FileUtilUsers {
                 pw.println(userNext.getUsername().username() + ":" + userNext.getPasswordHash());
             }
         } catch (FileNotFoundException e) {
-            String message = "Cannot store users in file: " + e.getMessage();
+            String message = "Cannot create users in file: " + e.getMessage();
+            Constants.errorAlert("Create user", message);
             logger.error(message);
-            throw new RuntimeException(e);
         }
     }
 
@@ -84,10 +111,9 @@ public class FileUtilUsers {
             }
         } catch (IOException e) {
             String message = "Problem with reading data from file: " + e.getMessage();
+            Constants.errorAlert("Getting users", message);
             logger.error(message);
-            throw new RuntimeException(e);
-        } catch (NullPointerException ignored) {
-        }
+        } catch (NullPointerException ignored) {}
         return existingUsers;
     }
 

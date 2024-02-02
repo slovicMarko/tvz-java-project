@@ -1,11 +1,9 @@
 package hr.production.slovic_projektni.controllers;
 
-import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.FxmlLoadException;
-import hr.production.slovic_projektni.main.Main;
+import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.model.Project;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +23,7 @@ public interface NavigationMethods {
             MainApplication.getMainStage().setScene(scene);
             MainApplication.getMainStage().show();
         } catch (IOException e) {
-            String message = "Error while loading: " + e.getMessage();
+            String message = "Error while loading: " + screenName;
             logger.error(message, e);
             throw new FxmlLoadException(e);
         }
@@ -44,13 +42,11 @@ public interface NavigationMethods {
             MainApplication.getMainStage().setScene(scene);
             MainApplication.getMainStage().show();
         } catch (IOException e) {
-            String message = "Error while loading: " + e.getMessage();
+            String message = "Error while loading: " + screenName;
             logger.error(message, e);
             throw new FxmlLoadException(e);
         }
     }
-
-
 
 
     static void showProjectView(Project project){

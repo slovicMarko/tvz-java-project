@@ -45,7 +45,7 @@
                   <HBox maxHeight="-Infinity" maxWidth="-Infinity" GridPane.rowIndex="2">
                      <children>
                         <Button mnemonicParsing="false" onAction="#saveButtonClicked" prefWidth="70.0" text="Save" />
-                        <Button mnemonicParsing="false" prefWidth="70.0" text="Delete">
+                        <Button mnemonicParsing="false" onAction="#deleteButtonClicked" prefWidth="70.0" text="Delete">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>

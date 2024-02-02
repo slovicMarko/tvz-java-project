@@ -16,5 +16,6 @@ public class FxmlLoadException extends RuntimeException {
 
     public FxmlLoadException(Throwable cause) {
         super(cause);
+
     }
 }

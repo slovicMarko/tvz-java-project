@@ -10,7 +10,6 @@ public class DatabaseConnection {
 
     private static final String DATABASE_FILE = "conf/database.properties";
 
-
     public static Connection connectToDatabase() throws SQLException, IOException {
 
         Properties svojstva = new Properties();
@@ -22,6 +21,5 @@ public class DatabaseConnection {
         return DriverManager.getConnection(databaseUrl,
                 username, password);
     }
-
 
 }

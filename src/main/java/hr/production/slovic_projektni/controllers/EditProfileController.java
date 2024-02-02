@@ -1,13 +1,13 @@
 package hr.production.slovic_projektni.controllers;
 
 import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.serialization.SerializableObject;
 import hr.production.slovic_projektni.threads.SetSerializableDataThread;
 import hr.production.slovic_projektni.utils.DatabaseUtilUsers;
 import hr.production.slovic_projektni.utils.FileUtilUsers;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -39,13 +39,12 @@ public class EditProfileController {
         User activeUser = MainApplication.getActiveUser();
         if (oldPasswordField.getText().isEmpty() || newPasswordField.getText().isEmpty() || repeatedPasswordField.getText().isEmpty()){
             logger.error("Empty text fields while changing password!");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Invalid input!");
-            alert.setContentText("Some text fields are empty");
-            alert.showAndWait();
+            Constants.errorAlert("Invaild input", "Some text fields are empty");
+
         } else {
             if (User.hashPassword(oldPasswordField.getText()).equals(activeUser.getPasswordHash())){
                 if (newPasswordField.getText().equals(repeatedPasswordField.getText())){
+
                     SerializableObject<User> userSerializableObject = new SerializableObject.Builder<>(activeUser)
                             .withChangedClass(new User(activeUser.getId(), activeUser.getFirstName(), activeUser.getLastName(), activeUser.getUsername(),
                                     User.hashPassword(newPasswordField.getText()),activeUser.getUserRole())).build();
@@ -56,20 +55,16 @@ public class EditProfileController {
                     FileUtilUsers.changeUserPassword(newPasswordField.getText());
                     DatabaseUtilUsers.changeUserPassword(activeUser.getId(), newPasswordField.getText());
                     logger.info("Password changed successfully. User: " + MainApplication.getActiveUser().getUsername());
+                    Constants.infoAlert("Password changed", "Password changed successfully.");
                     NavigationMethods.goToProjectSearchPage();
+
                 } else {
                     logger.error("New password not match repeated. User: " + MainApplication.getActiveUser().getUsername());
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setHeaderText("Password not changed!");
-                    alert.setContentText("New password not match repeated.");
-                    alert.showAndWait();
+                    Constants.errorAlert("Password not changed!", "New password not match repeated.");
                 }
             } else {
                 logger.error("Old password isn't correct. User: " + MainApplication.getActiveUser().getUsername());
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Password not changed!");
-                alert.setContentText("Old password isn't correct.");
-                alert.showAndWait();
+                Constants.errorAlert("Password not changed!", "Old password isn't correct.");
             }
         }
 

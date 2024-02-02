@@ -1,5 +1,6 @@
 package hr.production.slovic_projektni.model;
 
+import hr.production.slovic_projektni.constants.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,6 @@ import java.util.regex.Pattern;
 public class User extends NamedEntity implements Serializable, Cloneable {
 
     private static final Logger logger = LoggerFactory.getLogger(User.class);
-
     private String firstName;
     private String lastName;
     private Username username;
@@ -60,29 +60,16 @@ public class User extends NamedEntity implements Serializable, Cloneable {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public Username getUsername() {
         return username;
     }
 
-
     public String getPasswordHash() {
         return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public UserRole getUserRole() {
@@ -110,9 +97,11 @@ public class User extends NamedEntity implements Serializable, Cloneable {
     @Override
     public User clone() {
         try {
-            User clone = (User) super.clone();
-            return clone;
+            return (User) super.clone();
         } catch (CloneNotSupportedException e) {
+            String message = "Error while cloning user for serialization";
+            logger.error(message);
+            Constants.errorAlert("Cloning error", message);
             throw new AssertionError();
         }
     }

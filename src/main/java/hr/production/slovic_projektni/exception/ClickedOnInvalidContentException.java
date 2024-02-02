@@ -1,6 +1,6 @@
 package hr.production.slovic_projektni.exception;
 
-public class ClickedOnInvalidContentException extends RuntimeException{
+public class ClickedOnInvalidContentException extends Exception{
 
     public ClickedOnInvalidContentException() {
     }

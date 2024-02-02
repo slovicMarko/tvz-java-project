@@ -1,7 +1,9 @@
 package hr.production.slovic_projektni.utils;
 
+import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.model.Comment;
 import hr.production.slovic_projektni.model.DateAndTime;
+import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.User;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
@@ -18,6 +20,49 @@ public class DatabaseUtilComment {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseUtilComment.class);
 
+    public static void deleteComment(Long commentId){
+        try (Connection connection = DatabaseConnection.connectToDatabase()){
+            String deleteSqlQuery = "DELETE FROM COMMENT WHERE ID = ?";
+            PreparedStatement pstmt = connection.prepareStatement(deleteSqlQuery);
+            pstmt.setLong(1, commentId);
+            pstmt.execute();
+
+        } catch (SQLException | IOException e) {
+            String message = "Problem with deleting comments from database.";
+            logger.error(message);
+            Constants.errorAlert("Problem with deleting", message);
+        }
+    }
+
+    public static void deleteUserComments(Long userId) {
+        try (Connection connection = DatabaseConnection.connectToDatabase()) {
+            String deleteProjectSql = "DELETE FROM COMMENT WHERE AUTHOR_ID = ?";
+            PreparedStatement pstmt = connection.prepareStatement(deleteProjectSql);
+            pstmt.setLong(1, userId);
+            pstmt.execute();
+        } catch (SQLException | IOException ex) {
+            String message = "Problem with deleting user comments from database.";
+            logger.error(message);
+            Constants.errorAlert("Problem with deleting", message);
+        }
+    }
+
+
+    public static void deleteAllProjectComments(Long projectId) {
+        try (Connection connection = DatabaseConnection.connectToDatabase()) {
+            String deleteSqlQuery = "DELETE FROM COMMENT WHERE PROJECT_ID = ?";
+            PreparedStatement pstmt = connection.prepareStatement(deleteSqlQuery);
+
+            pstmt.setLong(1, projectId);
+            pstmt.execute();
+        } catch (SQLException | IOException e) {
+            String message = "Problem with deleting comments from project.";
+            logger.error(message);
+            Constants.errorAlert("Problem with deleting", message);
+        }
+    }
+
+
 
     public static void updateCommentContent(Comment comment) {
         try (Connection connection = DatabaseConnection.connectToDatabase()) {
@@ -32,14 +77,9 @@ public class DatabaseUtilComment {
             pstmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Unsuccessful save!");
-            alert.setContentText("Your change isn't saved.");
-            alert.showAndWait();
-
-            String message = "Comment is not changed.";
+            String message =  "Comment with id: " + comment.getId() + " is not updated.";
+            Constants.errorAlert("Unsuccessful change!", message);
             logger.error(message);
-
         }
     }
 
@@ -61,14 +101,9 @@ public class DatabaseUtilComment {
             pstmt.executeUpdate();
 
         } catch (SQLException | IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Unsuccessful save!");
-            alert.setContentText("Your impression isn't saved.");
-            alert.showAndWait();
-
-            String message = "Like is not applied to comment.";
-            logger.error(message);
-
+            String message = "Like is not applied to comment";
+            Constants.errorAlert("Unsuccessful change!", message);
+            logger.error(message + " where id = " + comment.getId());
         }
     }
 
@@ -90,14 +125,9 @@ public class DatabaseUtilComment {
                 }
             }
         } catch (SQLException | IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Unsuccessful save!");
-            alert.setContentText("Your comment isn't saved.");
-            alert.showAndWait();
-
             String message = "Comment is not saved.";
+            Constants.errorAlert("Unsuccessful save!", message);
             logger.error(message);
-
         }
         return null;
     }
@@ -126,12 +156,12 @@ public class DatabaseUtilComment {
                 for (String stringId : likes.split(",")) {
                     likesId.add(Long.parseLong(stringId));
                 }
-
                 comments.add(new Comment(id, author, content, new DateAndTime(postDate),likesId));
             }
 
         } catch (SQLException | IOException ex) {
-            String message = "Problem while catching Project comments.";
+            String message = "Problem with getting Project comments.";
+            Constants.errorAlert("Getting comments!", message);
             logger.error(message);
         }
         return comments;

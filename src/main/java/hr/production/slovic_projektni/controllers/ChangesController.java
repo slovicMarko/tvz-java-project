@@ -1,14 +1,13 @@
 package hr.production.slovic_projektni.controllers;
 
-import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.ClickedOnInvalidContentException;
+import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.model.Comment;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.User;
 import hr.production.slovic_projektni.serialization.SerializableObject;
 import hr.production.slovic_projektni.threads.FindLastSerializableChangeThread;
 import hr.production.slovic_projektni.threads.GetSerializableDataThread;
-import hr.production.slovic_projektni.utils.DatabaseUtilUsers;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
@@ -24,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +51,6 @@ public class ChangesController<T> {
 
           Platform.runLater(() -> {
                SerializableObject<T> selectedObject = findLastSerializableChangeThread.getLastData();
-
                displayLastChangeInTextArea(selectedObject);
           });
 
@@ -107,13 +104,15 @@ public class ChangesController<T> {
           }
      }
 
-     private void selectingClickedChange() {
+     private void selectingClickedChange() throws ClickedOnInvalidContentException{
 
           SerializableObject<T> selectedObject = serializedObjectTableView.getSelectionModel().getSelectedItem();
           if (selectedObject != null){
                displayLastChangeInTextArea(selectedObject);
           } else {
-               throw new ClickedOnInvalidContentException("Clicked outside of the projects table.");
+               String message = "Clicked outside of the projects table.";
+               logger.warn(message);
+               throw new ClickedOnInvalidContentException(message);
           }
 
      }
@@ -135,15 +134,12 @@ public class ChangesController<T> {
           if (comment.getContent() == null){
                return "Author: " +
                        "\n\nContent: " +
-                       "\n\nUsers like this: \n";
+                       "\n\nNumber of likes: \n";
           }
           String formatedString = "Author: " + comment.getAuthor().getFirstName() + " " + comment.getAuthor().getLastName() +
                   "\n\nContent: " + comment.getContent() +
-                  "\n\nUsers like this: \n";
-          Map<Long, User> userMap = DatabaseUtilUsers.getUsersMap();
-          for (Long id : comment.getLikes()){
-               formatedString += "\t " + userMap.get(id).getFirstName() + " " + userMap.get(id).getLastName() + "\n";
-          }
+                  "\n\nNumber of likes: " + comment.getLikes().size();
+
           return formatedString;
      }
 
@@ -192,7 +188,7 @@ public class ChangesController<T> {
                          return new ReadOnlyStringWrapper(findAttributesProject((SerializableObject<Project>) param.getValue()));
                     }
 
-                    return new ReadOnlyStringWrapper("Attribute");
+                    return new ReadOnlyStringWrapper("Changed Attribute");
                }
           });
           userTableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SerializableObject<T>, String>, ObservableValue<String>>() {

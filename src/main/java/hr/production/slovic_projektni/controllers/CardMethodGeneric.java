@@ -1,7 +1,7 @@
 package hr.production.slovic_projektni.controllers;
 
-import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.FxmlLoadException;
+import hr.production.slovic_projektni.MainApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;

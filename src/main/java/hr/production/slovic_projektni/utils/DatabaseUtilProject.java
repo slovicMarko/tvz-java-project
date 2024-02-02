@@ -1,6 +1,6 @@
 package hr.production.slovic_projektni.utils;
 
-import hr.production.slovic_projektni.MainApplication;
+import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.model.DateAndTime;
 import hr.production.slovic_projektni.model.Project;
 import hr.production.slovic_projektni.model.Subject;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +19,28 @@ public class DatabaseUtilProject {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseUtilProject.class);
 
+    public static void deleteUserProjects(Long userId) {
+        try (Connection connection = DatabaseConnection.connectToDatabase()) {
+            String deleteProjectSql = "DELETE FROM PROJECT WHERE AUTHOR_ID = ?";
+            PreparedStatement pstmt = connection.prepareStatement(deleteProjectSql);
+            pstmt.setLong(1, userId);
+            pstmt.execute();
+        } catch (SQLException | IOException ex) {
+            String message = "Problem with deleting Project from Database.";
+            Constants.errorAlert("Problem with deleting", message);
+            logger.error(message);
+        }
+    }
+
     public static void deleteProject(Long projectId) {
         try (Connection connection = DatabaseConnection.connectToDatabase()) {
             String deleteProjectSql = "DELETE FROM PROJECT WHERE ID = ?";
             PreparedStatement pstmt = connection.prepareStatement(deleteProjectSql);
             pstmt.setLong(1, projectId);
-            pstmt.executeUpdate();
+            pstmt.execute();
         } catch (SQLException | IOException ex) {
-
-            String message = "Problem while deleting Project from Database.";
+            String message = "Problem with deleting Project from Database.";
+            Constants.errorAlert("Problem with deleting", message);
             logger.error(message);
         }
     }
@@ -53,6 +65,7 @@ public class DatabaseUtilProject {
         } catch (SQLException | IOException ex) {
 
             String message = "Problem with uploading Projects data.";
+            Constants.errorAlert("Edit project data", message);
             logger.error(message);
         }
     }
@@ -74,6 +87,7 @@ public class DatabaseUtilProject {
         } catch (SQLException | IOException ex) {
 
             String message = "Problem with saving new project.";
+            Constants.errorAlert("Problem with saving", message);
             logger.error(message);
         }
     }
@@ -97,7 +111,8 @@ public class DatabaseUtilProject {
                 mapResultSetToProjectList(user, resultSet, projects, users);
             }
         } catch (SQLException | IOException ex) {
-            String message = "Problem with catching projects from Database.";
+            String message = "Problem with getting projects from Database.";
+            Constants.errorAlert("Getting projects", message);
             logger.error(message);
         }
 

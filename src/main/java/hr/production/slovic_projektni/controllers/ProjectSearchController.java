@@ -1,13 +1,12 @@
 package hr.production.slovic_projektni.controllers;
 
 
-import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.constants.Constants;
 import hr.production.slovic_projektni.exception.ClickedOnInvalidContentException;
 import hr.production.slovic_projektni.exception.DataNotLoadedException;
+import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.model.Subject;
 import hr.production.slovic_projektni.model.Project;
-import hr.production.slovic_projektni.sort.DateSorter;
 import hr.production.slovic_projektni.threads.GetProjectsThread;
 import hr.production.slovic_projektni.utils.DatabaseUtilProject;
 import javafx.application.Platform;
@@ -47,14 +46,10 @@ public class ProjectSearchController {
 
     private GetProjectsThread getProjectsThread;
     private static ScheduledExecutorService executorService;
-    List<Project> projectsList, filteredList = new ArrayList<>();
+    private List<Project> projectsList = new ArrayList<>();
 
     public void initialize(){
 
-        setChoiceBoxes();
-
-        projectsList = DatabaseUtilProject.getProjects().stream().sorted(new DateSorter<Project>(true)).collect(Collectors.toList());
-        projectTableView.setItems(FXCollections.observableArrayList(projectsList));
 
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(() -> {
@@ -77,6 +72,10 @@ public class ProjectSearchController {
 
         initializeTableColumns();
 
+        searchBarFilter();
+        setChoiceBoxes();
+
+
         projectTableView.setOnMouseClicked((event)-> {
             try{
                 if (event.getClickCount() == 2){
@@ -84,26 +83,56 @@ public class ProjectSearchController {
                 }
             } catch (ClickedOnInvalidContentException ex){
                 logger.error(ex.getMessage());
-                System.out.println(ex.getMessage());
             }
         });
 
+    }
+
+    private void searchBarFilter() {
         projectSearchTextField.setOnKeyTyped(event -> {
             try{
-                filteredList = projectsList.stream()
-                        .filter(project ->
-                            projectSearchTextField.getText().isEmpty() ||
-                                    project.getName().toLowerCase().contains(projectSearchTextField.getText().toLowerCase()) ||
-                                    project.getDescription().toLowerCase().contains(projectSearchTextField.getText().toLowerCase()))
-                        .collect(Collectors.toList());
-                projectTableView.setItems(FXCollections.observableArrayList(filteredList));
+                checkIfDataIsLoaded();
             } catch (DataNotLoadedException e){
-                logger.error("Data is not load.");
+                logger.error(e.getMessage());
+                System.out.println(e.getMessage());
             }
         });
     }
 
-    private void selectingClickedProject() {
+    private void checkIfDataIsLoaded(){
+        if (projectsList.isEmpty()){
+            throw new DataNotLoadedException("Data is not loaded.");
+        } else {
+            List<Project> filteredList = projectsList.stream()
+                    .filter(project ->
+                            projectSearchTextField.getText().isEmpty() ||
+                                    project.getName().toLowerCase().contains(projectSearchTextField.getText().toLowerCase()) ||
+                                    project.getDescription().toLowerCase().contains(projectSearchTextField.getText().toLowerCase()))
+                    .collect(Collectors.toList());
+            projectTableView.setItems(FXCollections.observableArrayList(filteredList));
+        }
+    }
+
+    private void setChoiceBoxes() {
+        List<Subject> subjects = Arrays.stream(Subject.values()).toList();
+        List<String> subjectNames = subjects.stream()
+                .map(Subject::getName)
+                .collect(Collectors.toList());
+
+        subjectNames.add(0, " Default");
+        List<String> professorNames = new ArrayList<>();
+        professorNames.add(" Default");
+
+        for (Subject subject : subjects){
+            if (!professorNames.contains(subject.getProfessorName())){
+                professorNames.add(subject.getProfessorName());
+            }
+        }
+        subjectFilterChoiceBox.setItems(FXCollections.observableArrayList(subjectNames));
+        professorFilterChoiceBox.setItems(FXCollections.observableArrayList(professorNames.stream().sorted().collect(Collectors.toList())));
+    }
+
+    private void selectingClickedProject() throws ClickedOnInvalidContentException{
         Project selectedProject = projectTableView.getSelectionModel().getSelectedItem();
         if (selectedProject != null){
             NavigationMethods.showProjectView(selectedProject);
@@ -130,27 +159,8 @@ public class ProjectSearchController {
                 .collect(Collectors.toList());
 
         projectTableView.setItems(FXCollections.observableArrayList(filteredProjects));
-
     }
 
-    private void setChoiceBoxes() {
-        List<Subject> subjects = Arrays.stream(Subject.values()).toList();
-        List<String> subjectNames = subjects.stream()
-                .map(Subject::getName)
-                .collect(Collectors.toList());
-
-        subjectNames.add(0, " Default");
-        List<String> professorNames = new ArrayList<>();
-        professorNames.add(" Default");
-
-        for (Subject subject : subjects){
-            if (!professorNames.contains(subject.getProfessorName())){
-                professorNames.add(subject.getProfessorName());
-            }
-        }
-        subjectFilterChoiceBox.setItems(FXCollections.observableArrayList(subjectNames));
-        professorFilterChoiceBox.setItems(FXCollections.observableArrayList(professorNames.stream().sorted().collect(Collectors.toList())));
-    }
 
     private void initializeTableColumns(){
 

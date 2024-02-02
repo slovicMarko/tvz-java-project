@@ -13,7 +13,6 @@ public class GetProjectsThread extends DatabaseThread implements Runnable{
     public void run() {
         CompletableFuture.runAsync(() -> {
             this.projectList = (super.getProjectsFromDatabase());
-            System.out.println("Nit se izvodi.");
         }).join();
     }
 

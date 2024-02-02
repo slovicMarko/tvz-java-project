@@ -1,32 +1,21 @@
 package hr.production.slovic_projektni.controllers;
 
-import hr.production.slovic_projektni.MainApplication;
 import hr.production.slovic_projektni.exception.FxmlLoadException;
-import hr.production.slovic_projektni.model.User;
-import hr.production.slovic_projektni.serialization.SerializableMethods;
-import hr.production.slovic_projektni.utils.DatabaseConnection;
+import hr.production.slovic_projektni.MainApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.security.Key;
-import java.sql.SQLException;
-import java.util.Optional;
-import java.util.Properties;
 
 public class NewScreenController {
+
+    Logger logger = LoggerFactory.getLogger(NewScreenController.class);
+
 
     @FXML private RowConstraints gridPaneRowWithButtons;
     @FXML private GridPane gridPaneContainer;
@@ -37,9 +26,7 @@ public class NewScreenController {
     private Boolean registerView = true;
 
 
-    public void initialize() {
-        //SerializableMethods.serializeToFileCorrect();
-    }
+    public void initialize() {}
 
     public void showLoginView() {
         gridPaneRowWithButtons.setMinHeight(0);
@@ -76,6 +63,8 @@ public class NewScreenController {
             gridPaneContainer.add(card, 0, 1);
 
         } catch (IOException e) {
+            String message = "Error while loading: " + name;
+            logger.error(message);
             throw new FxmlLoadException(e);
         }
         return false;

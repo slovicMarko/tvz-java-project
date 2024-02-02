@@ -1,5 +1,7 @@
 package hr.production.slovic_projektni;
 
+
+
 import hr.production.slovic_projektni.model.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,11 +9,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class MainApplication extends Application {
-
     public static Stage mainStage;
 
     public static User activeUser;
@@ -19,10 +18,10 @@ public class MainApplication extends Application {
 
     public static String getFxmlName(){
         return fxmlFileName;
-    };
+    }
     public static void setFxmlName(String name){
         fxmlFileName = name;
-    };
+    }
 
     public static User getActiveUser() {
         return activeUser;
@@ -35,7 +34,6 @@ public class MainApplication extends Application {
     public static void logoutUser() {
         MainApplication.activeUser = null;
     }
-
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -54,5 +52,4 @@ public class MainApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
-
 }

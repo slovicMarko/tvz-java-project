@@ -2,7 +2,9 @@ package hr.production.slovic_projektni.model;
 
 
 import hr.production.slovic_projektni.MainApplication;
-import hr.production.slovic_projektni.main.Main;
+import hr.production.slovic_projektni.constants.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,10 +12,11 @@ import java.util.Objects;
 
 public non-sealed class Comment extends NamedEntity implements LikedComment, Serializable, Cloneable {
 
+    private static final Logger logger = LoggerFactory.getLogger(Comment.class);
     private User author;
     private String content;
     private DateAndTime postDate;
-    List<Long> likes;
+    private List<Long> likes;
 
     public Comment(Long id, User author, String content, DateAndTime postDate, List<Long> likes) {
         super(id);
@@ -54,12 +57,12 @@ public non-sealed class Comment extends NamedEntity implements LikedComment, Ser
 
     @Override
     public void submitLike() {
-        this.likes.add(MainApplication.activeUser.getId());
+        this.likes.add(MainApplication.getActiveUser().getId());
     }
 
     @Override
     public void submitDislike() {
-        this.likes.remove(MainApplication.activeUser.getId());
+        this.likes.remove(MainApplication.getActiveUser().getId());
     }
 
     @Override
@@ -81,6 +84,9 @@ public non-sealed class Comment extends NamedEntity implements LikedComment, Ser
         try {
             return (Comment) super.clone();
         } catch (CloneNotSupportedException e) {
+            String message = "Error while cloning comment for serialization";
+            logger.error(message);
+            Constants.errorAlert("Cloning error", message);
             throw new AssertionError();
         }
     }
